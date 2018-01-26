@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<GridPane fx:id="mainPane" hgap="3.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" vgap="3.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.GUIController">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="261.77783203125" minWidth="10.0" percentWidth="35.0" prefWidth="148.4444580078125" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="331.5555419921875" minWidth="10.0" percentWidth="25.0" prefWidth="279.5555419921875" />
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="40.0" prefWidth="100.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints minHeight="10.0" percentHeight="33.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="125.66665649414062" minHeight="10.0" percentHeight="33.0" prefHeight="107.88888549804688" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="113.11111450195312" minHeight="10.0" percentHeight="33.0" prefHeight="113.11111450195312" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <Pane fx:id="MapPane" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowSpan="2" />
+      <VBox prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+         <children>
+            <Label fx:id="orginDist" text="Distance from origin:" />
+            <Label fx:id="travDist" text="Distance travelled:" />
+            <Label fx:id="batLevel" text="Battery state" />
+            <Label fx:id="hdop" text="HDOP:" />
+            <Label fx:id="connState" text="Connection state: " />
+         </children>
+      </VBox>
+      <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+         <children>
+            <Label text="Info stream" />
+            <TextArea fx:id="infoPane" editable="false" prefHeight="200.0" prefWidth="200.0">
+               <padding>
+                  <Insets left="3.0" right="3.0" />
+               </padding>
+            </TextArea>
+         </children>
+      </VBox>
+      <VBox prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+         <children>
+            <Button fx:id="tempButt" mnemonicParsing="false" onAction="#drawMap" text="Temp" />
+            <Button fx:id="closeButt" mnemonicParsing="false" onAction="#close" text="Close" />
+            <Button fx:id="openButt" mnemonicParsing="false" onAction="#openBay" text="Open" />
+            <Button fx:id="closeButt" mnemonicParsing="false" onAction="#closeBay" text="Close" />
+         </children>
+      </VBox>
+      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="2" GridPane.rowIndex="2">
+        <tabs>
+          <Tab text="Camera">
+               <content>
+                  <GridPane alignment="CENTER">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Button fx:id="leftButton" mnemonicParsing="false" onAction="#camLeft" text="Left" GridPane.rowIndex="1" />
+                        <Button mnemonicParsing="false" text="Right" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <Button mnemonicParsing="false" text="Down" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Up" GridPane.columnIndex="1" />
+                     </children>
+                  </GridPane>
+               </content>
+          </Tab>
+          <Tab text="Connection">
+               <content>
+                  <VBox prefHeight="200.0" prefWidth="100.0" spacing="4.0">
+                     <padding>
+                        <Insets top="4.0" />
+                     </padding>
+                     <children>
+                        <HBox prefWidth="200.0" spacing="5.0">
+                           <children>
+                              <MenuButton fx:id="connMenu" mnemonicParsing="false" text="Connection List" />
+                              <Button fx:id="conUpButt" mnemonicParsing="false" onAction="#updateCons" text="Update list" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+                           <children>
+                              <Button fx:id="connInfo" mnemonicParsing="false" onAction="#getConInfo" text="Connection info" />
+                              <Button fx:id="discButt" mnemonicParsing="false" onAction="#disconnect" text="Disconnect" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </content>
+          </Tab>
+            <Tab text="Maps">
+               <content>
+                  <VBox prefHeight="200.0" prefWidth="100.0" spacing="4.0">
+                     <children>
+                        <HBox prefWidth="200.0" spacing="10.0">
+                           <children>
+                              <MenuButton fx:id="mapList" mnemonicParsing="false" text="Maps" />
+                              <Button fx:id="mapUpdate" mnemonicParsing="false" onAction="#upMaps" text="Update maps" />
+                           </children>
+                        </HBox>
+                        <Button fx:id="mapButt" mnemonicParsing="false" onAction="#drawMap" text="Draw map" />
+                     </children>
+                     <padding>
+                        <Insets top="4.0" />
+                     </padding>
+                  </VBox>
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+   <padding>
+      <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+   </padding>
+</GridPane>
