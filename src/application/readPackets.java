@@ -1,46 +1,151 @@
 package application;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.NoSuchElementException;
 import java.util.concurrent.SynchronousQueue;
 import java.util.logging.Logger;
+
+import com.fazecast.jSerialComm.SerialPort;
 
 public class readPackets implements Runnable {
 	private static final Logger log = Logger.getLogger(readPackets.class.getName());
 	private SynchronousQueue<Byte> byteBuff;
 	private SerialCommunicator comm;
-	private boolean inPack, inBatt;
-	private char[] datPack, battPack;
-	private int datInd, battInd;
+	private boolean inPack;
+	private byte[] datPack;
+	private int datInd;
+	private Thread t;
+	private InputStream in;
 	
 	//Transmission constants (all private by default, not written for clarity)
-	static final char DROP_OPEN = 'o', DROP_CLOSE = 'c', BATT_V = 'b';
+	static final char DROP_OPEN = 'o', DROP_CLOSE = 'c';
 	static final char AUTO_ON = 'a', AUTO_OFF = 'n';
 	static final char AUTO_ON_CONF = 'b', AUTO_OFF_CONF = 'd';
 	static final char PACKET_START = '*', PACKET_END = 'e';
+	static final char KILL_THREAD = 'K';
+	static final int PACKET_LENGTH = 38;
 	
 	public readPackets(SynchronousQueue<Byte> buff, SerialCommunicator _comm) {
 		byteBuff = buff;
 		comm = _comm;
-		inPack = inBatt = false;
-		datPack = new char[5];
-		battPack = new char[27];
+		reset();
+		datPack = new byte[PACKET_LENGTH];
+		log.info("Started reader thread.");
 	}
 	private void clear() {
+		log.severe("Clearing");
 		byteBuff.clear();
 		comm.flushInput();
-		inPack = inBatt = false;
+		reset();
+	}
+	public Thread start()  {
+		if(t == null) {
+			t = new Thread (this, this.getClass().getName());
+			t.start();
+			return t;
+		}
+		return null;
+	}
+	private void reset() {
+		inPack = false;
+		datInd = 0;
 	}
 	@Override
-	public void run() {
-		boolean badRun = false;
+	public void run()  {
+		boolean badRun = false, pop = false;
 		int badData = 5;
-		char tmp;
+		char tmp = 'e';
 		while(true) {
-			if(badRun && badData < 5)
+			//Checks
+			if(Thread.currentThread().isInterrupted()) {
+				log.info("Thread killed successfully.");
+				return;
+			}
+			if(!comm.getState()) {
+				in = null;
+				continue;
+			} else if(in == null)
+				in = comm.getInputStream();
+			
+			try {if(in.available()  <= 0) {continue; }} catch(IOException e) {} //Don't proceed if there are not bytes availible to read.
+			
+			//Collection
+			if(badData < 5 && !badRun)
 				badData = 5;
 			badRun = false;
-			if(byteBuff.size() > 0) {
-				tmp = (char)byteBuff.poll().byteValue();
-				if(!inPack && !inBatt) {
+			
+			pop = true;
+			while(pop) {
+				try {
+					tmp = (char)in.read();
+					pop = false;
+				} catch (IOException e){}
+			}
+			if(!inPack) {
+				if(tmp == DROP_OPEN)
+					log.info("Drop bay open.");
+				else if(tmp == DROP_CLOSE)
+					log.info("Drop bay closed.");
+				else if(tmp == AUTO_ON_CONF)
+					log.info("Auto drop enable confirmed.");
+				else if(tmp == AUTO_OFF_CONF)
+					log.info("Auto drop disable confirmed.");
+				else if(tmp == PACKET_START) { //Start of data packet
+					inPack = true;
+					datPack[0] = (byte)tmp;
+					datInd++;
+				}
+				else {
+					log.severe("Bad data received.");
+					badRun = true;
+					if(--badData < 1)
+						clear();
+				}
+			} else if(inPack) { //Data packet
+				datPack[datInd] = (byte)tmp;
+				if(datInd == 1 && (datPack[datInd - 1] != '*' || datPack[datInd] != 'p'))
+					clear();
+				if(datPack[datInd] == 'e' && datInd > 1 && datPack[datInd-1] == 'e') {
+					if(datInd != PACKET_LENGTH - 1) {
+						System.out.println("Good packet received.");
+						new Thread(new Runnable() {
+							@Override
+							public void run() {
+								comm.markPack();
+								comm.datM.newPacket(datPack);
+							}
+						}).start();
+					}
+					reset();
+				}
+				datInd++;
+			}	
+		}
+	}
+	/*
+	@Override
+	public void run() {
+		boolean badRun = false, pop = false;
+		int badData = 5;
+		char tmp = 'e';
+		while(true) {
+			if(Thread.currentThread().isInterrupted()) {
+				log.info("Thread killed successfully.");
+				return;
+			}
+			if(badData < 5 && !badRun)
+				badData = 5;
+			badRun = false;
+			if(comm.getState() && currPort != null && currPort.bytesAvailable() > 0) {
+				pop = true;
+				while(pop) {
+					try {
+						tmp = (char)byteBuff.remove().byteValue();
+						pop = false;
+					} catch (NoSuchElementException e){}
+				}
+				if(!inPack) {
 					if(tmp == DROP_OPEN)
 						log.info("Drop bay open.");
 					else if(tmp == DROP_CLOSE)
@@ -49,13 +154,10 @@ public class readPackets implements Runnable {
 						log.info("Auto drop enable confirmed.");
 					else if(tmp == AUTO_OFF_CONF)
 						log.info("Auto drop disable confirmed.");
-					else if(tmp == BATT_V) {
-						inBatt = true;
-						battPack[0] = tmp;
-					}
-					else if(tmp == PACKET_START) {
+					else if(tmp == PACKET_START) { //Start of data packet
+						System.out.println("Pack start");
 						inPack = true;
-						datPack[0] = tmp;
+						datPack[0] = (byte)tmp;
 						datInd++;
 					}
 					else {
@@ -65,54 +167,26 @@ public class readPackets implements Runnable {
 							clear();
 					}
 				} else if(inPack) { //Data packet
-					datPack[datInd] =  tmp;
-					if(datPack[datInd] == 'e' && datInd > 1 && datPack[datInd-1] == 'e')
+					datPack[datInd] = (byte)tmp;
+					if(datInd == 1 && (datPack[datInd - 1] != '*' || datPack[datInd] != 'p'))
 						clear();
+					if(datPack[datInd] == 'e' && datInd > 1 && datPack[datInd-1] == 'e') {
+						if(datInd != datPack.length - 1) {
+							log.info("Good packet received.");
+							new Thread(new Runnable() {
+								@Override
+								public void run() {
+									comm.markPack();
+									comm.datM.newPacket(datPack);
+								}
+							}).start();
+						}
+						else
+							reset();
+					}
 					datInd++;
-				} else { //In battery packet
-					
 				}
 			}
 		}
-	}
-	/*
-	if(incom[i] == DROP_OPEN)
-		log.info("Drop bay open.");
-	else if(incom[i] == DROP_CLOSE)
-		log.info("Drop bay closed.");
-	else if(incom[i] == AUTO_ON_CONF)
-		log.info("Auto drop enable confirmed.");
-	else if(incom[i] == AUTO_OFF_CONF)
-		log.info("Auto drop disable confirmed");
-	else if(incom[i] == BATT_V) {
-		byte[] bt = new byte[4];
-		try {
-		for(int j=0;j<8;j++)
-			bt[j] = incom[i+j];
-		} catch(ArrayIndexOutOfBoundsException e) {
-			log.severe("Could not read battery level.");
-		}
-		battState =  byteToFloat(bt);
-		log.fine("Battery level at: " + battState);
-		i += 4;
-	}
-	else if(incom[i] == PACKET_START) {
-		int j;
-		String packet = "";
-		try {
-			for(j=0;incom[i+j]!='e';j++)  {
-				packet += incom[i+j];
-				
-			}
-			log.info("Packet = " + packet);
-			i += j;
-		} catch(ArrayIndexOutOfBoundsException e){
-			log.severe("Failure in reading packet.");
-		}
-	}
-	else if(incom[i]== PACKET_END)
-		log.finest("End of packet.");
-	else
-		log.severe("Bad data received.");
-	*/
+	} */
 }

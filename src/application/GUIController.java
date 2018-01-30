@@ -77,7 +77,7 @@ public class GUIController {
 		datM = new dataManager(this);	//Works with bytes from comm
 		datM.passComm(comm);	//Passes comm..
 		comm.passDataM(datM);
-		path = new ArrayList<>();
+		path = datM.getPath();
 		connButtSt(false);
 		log.fine("Initializing.");
 	}
@@ -144,7 +144,18 @@ public class GUIController {
 		gc.drawImage(im, 0, 0, scl*im.getWidth(), scl*im.getHeight());
 		log.fine("Map drawn");
 	}
+	@FXML
+	public void checkThread() {
+		if(comm.threadAlive())
+			log.info("Thread is alive and well.");
+		else {
+			log.info("Thread is dead!");
+			comm.resuscitate();
+		}
+	}
+	@FXML
 	public void close() {
+		comm.killThread();
 		if(comm.getState() && !comm.closeConnection()) {
 			log.severe("Failed to close connection");
 			return;

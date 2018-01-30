@@ -48,10 +48,9 @@
       </VBox>
       <VBox prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
          <children>
-            <Button fx:id="tempButt" mnemonicParsing="false" onAction="#drawMap" text="Temp" />
             <Button fx:id="closeButt" mnemonicParsing="false" onAction="#close" text="Close" />
-            <Button fx:id="openButt" mnemonicParsing="false" onAction="#openBay" text="Open" />
-            <Button fx:id="closeButt" mnemonicParsing="false" onAction="#closeBay" text="Close" />
+            <Button fx:id="openButt" mnemonicParsing="false" onAction="#openBay" text="Open bay" />
+            <Button fx:id="closeButt" mnemonicParsing="false" onAction="#closeBay" text="Close bay" />
          </children>
       </VBox>
       <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="2" GridPane.rowIndex="2">
@@ -91,12 +90,13 @@
                               <Button fx:id="conUpButt" mnemonicParsing="false" onAction="#updateCons" text="Update list" />
                            </children>
                         </HBox>
-                        <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+                        <HBox prefWidth="200.0" spacing="5.0">
                            <children>
                               <Button fx:id="connInfo" mnemonicParsing="false" onAction="#getConInfo" text="Connection info" />
                               <Button fx:id="discButt" mnemonicParsing="false" onAction="#disconnect" text="Disconnect" />
                            </children>
                         </HBox>
+                        <Button mnemonicParsing="false" onAction="#checkThread" text="Check thread." />
                      </children>
                   </VBox>
                </content>

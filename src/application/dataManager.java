@@ -9,11 +9,11 @@ public class dataManager {
 	private float distToOrg;
 	private float distTrav;
 	private ArrayList<tuple> path;
-	private float battState;
-	private float HDOP;
+	private float altAlt, altGPS, speed, HDOP, sValid, battState;
+	private int satelites;
+	private String fixType;
 	private GUIController cont;
 	private SerialCommunicator comm;
-	private SerialPort actPort;
 	private static final Logger log = Logger.getLogger(dataManager.class.getName());
 	
 	//Transmission constants (all private by default, not written for clarity)
@@ -21,70 +21,27 @@ public class dataManager {
 	static final char AUTO_ON = 'a', AUTO_OFF = 'n';
 	static final char AUTO_ON_CONF = 'b', AUTO_OFF_CONF = 'd';
 	static final char PACKET_START = '*', PACKET_END = 'e';
+	static final String[] FIX_TYPE = {"invalid", "GPS fix (SPS)", "DGPS fix",  "PPS fix", "Real Time Kinematic", "Float RTK", "estimated (dead reckoning) (2.3 feature)", "Manual input mode", "Simulation mode"};
 		
 	public dataManager(GUIController _cont) {
 		cont = _cont;
 		distToOrg = distTrav = battState = HDOP = 0;
 		path = new ArrayList<tuple>();
 	}
+	public ArrayList<tuple> getPath() {return path; }
 	public void passComm(SerialCommunicator _comm) {comm = _comm; }
 	private void update() {
-		cont.orginDist.setText("Distance from origin: " + Float.toString(distToOrg) + "m");
-		cont.travDist.setText("Distance travelled: " + Float.toString(distTrav) + "m");
-		cont.batLevel.setText("Battery state: " + Float.toString(battState) + "%");
-		cont.hdop.setText("HDOP: " + Float.toString(HDOP));
-		if(comm != null && comm.getState())
-			cont.connState.setText("Connection state: Connected to " + comm.portName);
-		else
-			cont.connState.setText("Disconnected.");
-	}
-	public void addPort(SerialPort _actPort) {
-		actPort = _actPort;
-	}
-	public void distribute(byte[] incom) {
-		for(int i=0;i<incom.length;i++)  {
-			if(incom[i] == DROP_OPEN)
-				log.info("Drop bay open.");
-			else if(incom[i] == DROP_CLOSE)
-				log.info("Drop bay closed.");
-			else if(incom[i] == AUTO_ON_CONF)
-				log.info("Auto drop enable confirmed.");
-			else if(incom[i] == AUTO_OFF_CONF)
-				log.info("Auto drop disable confirmed");
-			else if(incom[i] == BATT_V) {
-				byte[] bt = new byte[4];
-				try {
-				for(int j=0;j<8;j++)
-					bt[j] = incom[i+j];
-				} catch(ArrayIndexOutOfBoundsException e) {
-					log.severe("Could not read battery level.");
-				}
-				battState =  byteToFloat(bt);
-				log.fine("Battery level at: " + battState);
-				i += 4;
-			}
-			else if(incom[i] == PACKET_START) {
-				int j;
-				String packet = "";
-				try {
-					for(j=0;incom[i+j]!='e';j++)  {
-						packet += incom[i+j];
-						
-					}
-					log.info("Packet = " + packet);
-					i += j;
-				} catch(ArrayIndexOutOfBoundsException e){
-					log.severe("Failure in reading packet.");
-				}
-			}
-			else if(incom[i]== PACKET_END)
-				log.finest("End of packet.");
+		synchronized(cont) {
+			cont.orginDist.setText("Distance from origin: " + Float.toString(distToOrg) + "m");
+			cont.travDist.setText("Distance travelled: " + Float.toString(distTrav) + "m");
+			cont.batLevel.setText("Battery state: " + Float.toString(battState) + "%");
+			cont.hdop.setText("HDOP: " + Float.toString(HDOP));
+			if(comm != null && comm.getState())
+				cont.connState.setText("Connection state: Connected to " + comm.portName);
 			else
-				log.severe("Bad data received.");
+				cont.connState.setText("Disconnected.");
 		}
-		update();
 	}
-	private float byteToFloat(byte[] bt) {return ByteBuffer.wrap(bt).getFloat(); }
 	public void openBay() {comm.sendByte((byte)DROP_OPEN); }
 	public void closeBay() {comm.sendByte((byte)DROP_CLOSE); }
 	public void newPoint(float latt, float lon){
@@ -95,7 +52,7 @@ public class dataManager {
 		tuple newLoc = new tuple((float)Math.toRadians(latt),(float)Math.toRadians(lon));	
 		float distFromLast = getDistance(path.get(path.size()-1),newLoc);
 		//check if new location more than 200m away from last point, if so don't add point
-		if(distFromLast<=200){
+		if(distFromLast > 1 && distFromLast<=200){
 			distTrav = distTrav + distFromLast;
 			distToOrg = getDistance(path.get(0),newLoc);
 			path.add(newLoc);
@@ -109,10 +66,37 @@ public class dataManager {
 		float dist = 6371 * c;
 		return dist*1000; 	//dist in meters
 	}
-	public float getDistanceTraveled(){
-		return distTrav;
-	}
-	public float distanceFromStart(){
-		return distToOrg;
+	public float getDistanceTraveled(){return distTrav; }
+	public float distanceFromStart(){return distToOrg; }
+	public void newPacket(byte[] pack) {
+		float lat = 0, lng = 0;
+		for(int i=2;i<4*9;i+=4) {
+			byte[] tmp = new byte[4];
+			System.arraycopy(pack, i, tmp, 0, 4);
+			if(i == 2)
+				altAlt = ByteBuffer.wrap(tmp).getFloat();
+			else if(i == 6)
+				speed = ByteBuffer.wrap(tmp).getFloat();
+			else if(i == 10)
+				lat = ByteBuffer.wrap(tmp).getFloat();
+			else if(i == 14)
+				lng = ByteBuffer.wrap(tmp).getFloat();
+			else if(i == 18)
+				HDOP = ByteBuffer.wrap(tmp).getFloat();
+			else if(i == 22)
+				sValid = ByteBuffer.wrap(tmp).getFloat();
+			else if(i == 26)
+				altGPS = ByteBuffer.wrap(tmp).getFloat();
+			else if(i == 30)
+				battState = ByteBuffer.wrap(tmp).getFloat();
+		}
+		newPoint(lat, lng);
+		try {
+			fixType = FIX_TYPE[pack[34]];
+			satelites = pack[35];
+			System.out.println(fixType + " " + satelites);
+		} catch(ArrayIndexOutOfBoundsException e) {log.severe("You fucked up... fix type doesn't exist"); }
+		update();
+		System.out.println("Parsed packet successfully.");
 	}
 }

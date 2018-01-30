@@ -3,6 +3,7 @@ package application;
 /** Notes on Class:
  * Based on the code from the old Java Swing version of the ground station
  * Uses a serial library that (should) work for all operating systems and doesn't have any weird dependencies (to make it easier for people)
+ * Reads and parses packets asynchronously by running a parallel thread (see readPackets class)
  */
 
 import java.io.IOException;
@@ -19,16 +20,18 @@ import com.fazecast.jSerialComm.SerialPortEvent;
 
 public class SerialCommunicator {
 	private ArrayList<SerialPort> commList;
-	private SerialPort currPort;
+	protected SerialPort currPort;
 	private InputStream in;
 	private OutputStream out;
 	private static final Logger log = Logger.getLogger(SerialCommunicator.class.getName());
 	private boolean connected;
 	private GUIController contrl;
-	private dataManager datM;
+	protected dataManager datM;
 	protected String portName;
 	protected CharBuffer incBuff;
 	protected SynchronousQueue<Byte> byteBuff;
+	private Thread readThread;
+	private readPackets reader;
 	
 	
 	//Connection constants
@@ -42,7 +45,25 @@ public class SerialCommunicator {
 		connected = false;
 		contrl = cont;
 		incBuff = CharBuffer.allocate(256);
+		byteBuff = new SynchronousQueue<Byte>();
+		resuscitate();
 	}
+	public void killThread()  {
+		boolean kill = false;
+		while(!kill) {
+			readThread.interrupt();
+			kill = !readThread.isAlive();
+		}
+	}
+	public void resuscitate() {
+		if(readThread != null && readThread.isAlive())
+			return;
+		reader = new readPackets(byteBuff, this);
+		readThread = reader.start();
+	}
+	public boolean threadAlive() {return readThread.isAlive(); }
+	public SerialPort getSerialPort() {return currPort; }
+	protected InputStream getInputStream() {return in; }
 	public void passDataM(dataManager _datM) {datM = _datM; }
 	public void updateCommList() {commList = new ArrayList<SerialPort>(Arrays.asList(SerialPort.getCommPorts())); }
 	public ArrayList<String> getCommList() {
@@ -57,25 +78,6 @@ public class SerialCommunicator {
 		log.finer(portName + "'s index is at " + getCommList().indexOf(portName));
 		return getCommList().indexOf(portName);
 	}
-	/*
-	public void Listen() {
-		InputStream in = currPort.getInputStream();
-		char newByte;
-		while(true) {
-			try {
-				if(in.available() > 0) {
-					log.log(Level.FINEST, "Byte availible.");
-					newByte = (char)in.read();
-					log.log(Level.FINEST, Character.toString(newByte));
-					if(newByte == '\r')
-						return;
-				}
-			} catch(IOException e) {
-				log.log(Level.SEVERE, "Error reading serial input buffer.");
-				log.log(Level.SEVERE, e.toString());
-			}
-		}
-	} */
 	public boolean openConnection(int portId) {
 		if(portId < 0 || commList.size() - 1 < portId) {
 			log.fine("Port index out of range.");
@@ -91,28 +93,30 @@ public class SerialCommunicator {
 		currPort.setBaudRate(BAUD_RATE);
 		out = currPort.getOutputStream();
 		in = currPort.getInputStream();
-		connected = true;
 		contrl.connButtSt(true);
-		//initXbee();
-		initReadList();
+		flushInput();
+		initXbee();
+		//initReadList();
+		connected = true;
 		
 		return true;
 	}
 	public boolean closeConnection() {
+		connected = false;
 		if(currPort.closePort()) {
 			log.info("Connection closed");
-			connected = false;
 			in = null;
 			out = null;
 			return true;
 		}
 		log.severe("Failed to close connection!");
+		connected = true;
 		return false;
 	}
 	public void flushInput() {
 		int limit = 0;
 		try {
-			while(in.available() > 0 && ++limit < 200)
+			while(in.available() > 0 && ++limit < 1000)
 				in.read();
 		} catch (IOException e) {
 			log.severe("Failed to read input buffer");
@@ -164,7 +168,7 @@ public class SerialCommunicator {
 				int numRead = currPort.readBytes(tmpBuff, tmpBuff.length);
 				//datM.distribute(tmpBuff);
 				toBuffer(tmpBuff);
-				log.finer(Integer.toString(numRead) + " bytes read.");
+				System.out.println(Integer.toString(numRead) + " bytes read.");
 			}
 		});
 		log.info("Added listener.");
@@ -225,5 +229,8 @@ public class SerialCommunicator {
 		log.finer("Xbee successfully out of command mode.");
 		log.info("Xbee successfully initialized.");
 		return true;
+	}
+	public void markPack()  {
+		System.out.println("New packet received.");
 	}
 }
