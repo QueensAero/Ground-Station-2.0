@@ -70,7 +70,7 @@ public class dataManager {
 	public float distanceFromStart(){return distToOrg; }
 	public void newPacket(byte[] pack) {
 		float lat = 0, lng = 0;
-		for(int i=2;i<4*9;i+=4) {
+		for(int i=2;i<31;i+=4) {
 			byte[] tmp = new byte[4];
 			System.arraycopy(pack, i, tmp, 0, 4);
 			if(i == 2)
@@ -94,9 +94,9 @@ public class dataManager {
 		try {
 			fixType = FIX_TYPE[pack[34]];
 			satelites = pack[35];
-			System.out.println(fixType + " " + satelites);
+			System.out.println(fixType + " " + satelites + " " + battState);
 		} catch(ArrayIndexOutOfBoundsException e) {log.severe("You fucked up... fix type doesn't exist"); }
-		update();
-		System.out.println("Parsed packet successfully.");
+		//update();
+		//System.out.println("Parsed packet successfully.");
 	}
 }

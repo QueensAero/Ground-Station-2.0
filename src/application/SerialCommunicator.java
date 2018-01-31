@@ -94,7 +94,7 @@ public class SerialCommunicator {
 		out = currPort.getOutputStream();
 		in = currPort.getInputStream();
 		contrl.connButtSt(true);
-		flushInput();
+		flushInput(Integer.MAX_VALUE);
 		initXbee();
 		//initReadList();
 		connected = true;
@@ -114,9 +114,12 @@ public class SerialCommunicator {
 		return false;
 	}
 	public void flushInput() {
+		flushInput(200);
+	}
+	public void flushInput(int lim) {
 		int limit = 0;
 		try {
-			while(in.available() > 0 && ++limit < 1000)
+			while(in.available() > 0 && ++limit < lim)
 				in.read();
 		} catch (IOException e) {
 			log.severe("Failed to read input buffer");

@@ -2,11 +2,8 @@ package application;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.NoSuchElementException;
 import java.util.concurrent.SynchronousQueue;
 import java.util.logging.Logger;
-
-import com.fazecast.jSerialComm.SerialPort;
 
 public class readPackets implements Runnable {
 	private static final Logger log = Logger.getLogger(readPackets.class.getName());
@@ -14,7 +11,7 @@ public class readPackets implements Runnable {
 	private SerialCommunicator comm;
 	private boolean inPack;
 	private byte[] datPack;
-	private int datInd;
+	private int datInd, badData;
 	private Thread t;
 	private InputStream in;
 	
@@ -24,7 +21,7 @@ public class readPackets implements Runnable {
 	static final char AUTO_ON_CONF = 'b', AUTO_OFF_CONF = 'd';
 	static final char PACKET_START = '*', PACKET_END = 'e';
 	static final char KILL_THREAD = 'K';
-	static final int PACKET_LENGTH = 38;
+	static final int PACKET_LENGTH = 38, BAD_COUNT = 50;
 	
 	public readPackets(SynchronousQueue<Byte> buff, SerialCommunicator _comm) {
 		byteBuff = buff;
@@ -48,14 +45,15 @@ public class readPackets implements Runnable {
 		return null;
 	}
 	private void reset() {
+		badData = BAD_COUNT;
 		inPack = false;
 		datInd = 0;
 	}
 	@Override
 	public void run()  {
-		boolean badRun = false, pop = false;
-		int badData = 5;
-		char tmp = 'e';
+		boolean badRun = false, pop = false, kickStart = false;
+		char tmp = 'e', last = 'k';
+		int st = 0;
 		while(true) {
 			//Checks
 			if(Thread.currentThread().isInterrupted()) {
@@ -71,7 +69,7 @@ public class readPackets implements Runnable {
 			try {if(in.available()  <= 0) {continue; }} catch(IOException e) {} //Don't proceed if there are not bytes availible to read.
 			
 			//Collection
-			if(badData < 5 && !badRun)
+			if(badData < 50 && !badRun)
 				badData = 5;
 			badRun = false;
 			
@@ -82,6 +80,12 @@ public class readPackets implements Runnable {
 					pop = false;
 				} catch (IOException e){}
 			}
+			if(tmp == 'p' && last == '*') {
+				kickStart = true;
+				inPack = true;
+				datPack = new byte[PACKET_LENGTH];
+			}
+			last = tmp;
 			if(!inPack) {
 				if(tmp == DROP_OPEN)
 					log.info("Drop bay open.");
@@ -93,26 +97,31 @@ public class readPackets implements Runnable {
 					log.info("Auto drop disable confirmed.");
 				else if(tmp == PACKET_START) { //Start of data packet
 					inPack = true;
+					datPack = new byte[PACKET_LENGTH];
 					datPack[0] = (byte)tmp;
 					datInd++;
 				}
 				else {
-					log.severe("Bad data received.");
+					log.finer("Bad data received.");
 					badRun = true;
 					if(--badData < 1)
 						clear();
 				}
 			} else if(inPack) { //Data packet
+				if(kickStart) {
+					datPack[0] = '*';
+					datInd = 1;
+					kickStart = false;
+				}
 				datPack[datInd] = (byte)tmp;
-				if(datInd == 1 && (datPack[datInd - 1] != '*' || datPack[datInd] != 'p'))
-					clear();
+				if(datInd == 1 && (datPack[0] != '*' || datPack[1] != 'p'))
+					reset();
 				if(datPack[datInd] == 'e' && datInd > 1 && datPack[datInd-1] == 'e') {
-					if(datInd != PACKET_LENGTH - 1) {
-						System.out.println("Good packet received.");
+					if(datInd == PACKET_LENGTH - 1) {
+						//System.out.println("Good packet received.");
 						new Thread(new Runnable() {
 							@Override
 							public void run() {
-								comm.markPack();
 								comm.datM.newPacket(datPack);
 							}
 						}).start();
