@@ -1,11 +1,26 @@
 Things to do 
--Get Logger to output to TextArea (Coby)
--Get Logger to flush to file (Coby)
--Initialize Xbee properly (Ben)
--Get Xbee to give connection strength and state
--Actually be able to choose map
+
+Critical:
 -Find and implement best way to save associated map coordinates - object search
--Measure and track distance from takeoff (Mike - DONE)
--Get video stream to display in GUI
--Get backup camera controls to work (Mike - DONE)
 -Get window to accept arrow keys for camera control
+-Find proper drivers for RCA to USB dongle
+-Get video stream to display in GUI
+-Determine what information we need regularily from arduino and change packet
+
+Important:
+-Get Logger to flush to file (Coby)
+-Get Xbee to give connection strength and state
+-Fix battery voltage reading
+-Get Logger to output to TextArea (Coby)
+
+
+
+Nice to have:
+-Actually be able to choose map
+	-Find a way to store and save related map data (i.e. corner GPS coordinates)
+	-Re-write map drawing to choose file based on selection
+
+
+
+When possible:
+-Make tutorial/overview document for git

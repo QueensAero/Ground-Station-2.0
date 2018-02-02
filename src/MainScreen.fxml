@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -18,7 +14,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane fx:id="mainPane" hgap="3.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" vgap="3.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.GUIController">
+<GridPane fx:id="mainPane" hgap="3.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" vgap="3.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.GUIController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="261.77783203125" minWidth="10.0" percentWidth="35.0" prefWidth="148.4444580078125" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="331.5555419921875" minWidth="10.0" percentWidth="25.0" prefWidth="279.5555419921875" />
@@ -31,15 +27,6 @@
   </rowConstraints>
    <children>
       <Pane fx:id="MapPane" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowSpan="2" />
-      <VBox prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.halignment="CENTER" GridPane.rowIndex="2">
-         <children>
-            <Label fx:id="orginDist" text="Distance from origin:" />
-            <Label fx:id="travDist" text="Distance travelled:" />
-            <Label fx:id="batLevel" text="Battery state" />
-            <Label fx:id="hdop" text="HDOP:" />
-            <Label fx:id="connState" text="Connection state: " />
-         </children>
-      </VBox>
       <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
          <children>
             <Label text="Info stream" />
@@ -76,7 +63,7 @@
                         <Button fx:id="leftButton" mnemonicParsing="false" onAction="#camLeft" text="Left" GridPane.rowIndex="1" />
                         <Button fx:id="rightButton" mnemonicParsing="false" onAction="#camRight" text="Right" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                         <Button fx:id="downButton" mnemonicParsing="false" onAction="#camDown" text="Down" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Button fx:id="upButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#upRight" text="Up" GridPane.columnIndex="1" />
+                        <Button fx:id="upButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#camUp" text="Up" GridPane.columnIndex="1" />
                      </children>
                   </GridPane>
                </content>
@@ -120,6 +107,44 @@
                      <padding>
                         <Insets top="4.0" />
                      </padding>
+                  </VBox>
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" GridPane.rowIndex="2">
+        <tabs>
+          <Tab text="General">
+               <content>
+                  <VBox prefHeight="200.0" prefWidth="100.0" spacing="3.0">
+                     <children>
+                        <Label fx:id="orginDist" text="Distance from origin:" />
+                        <Label fx:id="travDist" text="Distance travelled:" />
+                        <Label fx:id="batLevel" text="Battery state: " />
+                        <Label fx:id="height" text="Height: " />
+                        <Label fx:id="speed" text="Speed:" />
+                     </children>
+                  </VBox>
+               </content>
+            </Tab>
+          <Tab text="Connection">
+               <content>
+                  <VBox prefHeight="200.0" prefWidth="100.0" spacing="3.0">
+                     <children>
+                        <Label fx:id="connState" text="Connection state: " />
+                        <Label fx:id="bytesAvail" text="Bytes availible: " />
+                     </children>
+                  </VBox>
+               </content>
+            </Tab>
+            <Tab text="GPS">
+               <content>
+                  <VBox prefHeight="200.0" prefWidth="100.0" spacing="4.0">
+                     <children>
+                        <Label fx:id="hdop" text="HDOP:" />
+                        <Label fx:id="vHDOP" text="Time since valid HDOP: " />
+                        <Label fx:id="satNum" text="Satellites" />
+                     </children>
                   </VBox>
                </content>
             </Tab>
