@@ -12,6 +12,8 @@ import java.io.OutputStream;
 import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.SynchronousQueue;
 import java.util.logging.Logger;
 import com.fazecast.jSerialComm.SerialPort;
@@ -32,21 +34,34 @@ public class SerialCommunicator {
 	protected SynchronousQueue<Byte> byteBuff;
 	private Thread readThread;
 	private readPackets reader;
-	
+	private Timer timer;
+	private long packetTime;
 	
 	//Connection constants
 	private static final int BAUD_RATE = 115200;
 	private static final String COMMAND_MODE_CMD = "+++", SWITCH_TO_AT_CMD = "ATAP0\r", EXIT_COMMAND_MODE_CMD = "ATCN\r", COMMAND_MODE_OK = "OK\r";
     private static final int INTO_CMD_MODE_TIMEOUT = 3000, RESPONSE_TIMEOUT = 750;
 	
+    class ThreadCheck extends TimerTask  {
+    	@Override
+    	public void run() {
+    		datM.printPackTime();
+    		resuscitate();
+    	}
+    }
+    
 	//Constructor
-	public SerialCommunicator(GUIController cont) {
+	public SerialCommunicator(GUIController cont, dataManager _datM) {
 		updateCommList();
+		datM = _datM;
 		connected = false;
 		contrl = cont;
 		incBuff = CharBuffer.allocate(256);
 		byteBuff = new SynchronousQueue<Byte>();
 		resuscitate();
+		timer = new Timer();
+		timer.schedule(new ThreadCheck(), 0, 50);
+		updatePackTime();
 	}
 	public void killThread()  {
 		boolean kill = false;
@@ -54,17 +69,20 @@ public class SerialCommunicator {
 			readThread.interrupt();
 			kill = !readThread.isAlive();
 		}
+		timer.cancel();
 	}
 	public void resuscitate() {
 		if(readThread != null && readThread.isAlive())
 			return;
 		reader = new readPackets(byteBuff, this);
 		readThread = reader.start();
+		log.severe("Thread was just resuscitated!");
 	}
+    protected void updatePackTime() {packetTime = System.currentTimeMillis(); }
+    protected long getPackTime() {return System.currentTimeMillis() - packetTime; }
 	public boolean threadAlive() {return readThread.isAlive(); }
 	public SerialPort getSerialPort() {return currPort; }
 	protected InputStream getInputStream() {return in; }
-	public void passDataM(dataManager _datM) {datM = _datM; }
 	public void updateCommList() {commList = new ArrayList<SerialPort>(Arrays.asList(SerialPort.getCommPorts())); }
 	public ArrayList<String> getCommList() {
 		updateCommList();
@@ -73,7 +91,6 @@ public class SerialCommunicator {
 			newList.add(pt.getDescriptivePortName());
 		return newList;
 	}
-
 	public int getPortId(String portName) {
 		log.finer(portName + "'s index is at " + getCommList().indexOf(portName));
 		return getCommList().indexOf(portName);
@@ -96,7 +113,6 @@ public class SerialCommunicator {
 		contrl.connButtSt(true);
 		flushInput(Integer.MAX_VALUE);
 		initXbee();
-		//initReadList();
 		connected = true;
 		
 		return true;

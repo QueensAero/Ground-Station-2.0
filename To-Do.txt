@@ -1,8 +1,8 @@
 Things to do 
 
 Critical:
--Find and implement best way to save associated map coordinates - object search
--Get window to accept arrow keys for camera control
+-Find and implement best way to save associated map coordinates - object search (Michael)
+-Get window to accept arrow keys for camera control (Brenden)
 -Find proper drivers for RCA to USB dongle
 -Get video stream to display in GUI
 -Determine what information we need regularily from arduino and change packet

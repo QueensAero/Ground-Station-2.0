@@ -46,6 +46,18 @@ public class GUIController {
 	Button discButt;
 	@FXML
 	Button connInfo;
+	@FXML
+	Label height;
+	@FXML 
+	Label satNum;
+	@FXML
+	Label bytesAvail;
+	@FXML
+	Label speed;
+	@FXML
+	Label vHDOP;
+	@FXML
+	Label packTime;
 	
 	//Status labels
 	@FXML
@@ -73,12 +85,12 @@ public class GUIController {
 	
 	@FXML
 	public void initialize() {
-		comm = new SerialCommunicator(this);	//Raw communication with Xbee
 		datM = new dataManager(this);	//Works with bytes from comm
+		comm = new SerialCommunicator(this, datM);	//Raw communication with Xbee
 		datM.passComm(comm);	//Passes comm..
-		comm.passDataM(datM);
 		path = datM.getPath();
 		connButtSt(false);
+		initCanvas();
 		log.fine("Initializing.");
 	}
 	
@@ -93,7 +105,7 @@ public class GUIController {
 		gc = mapCan.getGraphicsContext2D();
 		gc.setStroke(Color.BLACK);
 		gc.setLineWidth(3);
-		log.fine("Canvas initialized.");
+		log.info("Canvas initialized.");
 	}
 	//Draws the path of the aircraft from scratch
 	public void drawPath() {
@@ -140,9 +152,9 @@ public class GUIController {
 			log.severe(e.toString());
 			return;
 		}
-		float scl = getScale(im);
-		gc.drawImage(im, 0, 0, scl*im.getWidth(), scl*im.getHeight());
-		log.fine("Map drawn");
+		//float scl = getScale(im);
+		gc.drawImage(im, 0, 0, im.getWidth(), im.getHeight());
+		log.info("Map drawn");
 	}
 	@FXML
 	public void checkThread() {

@@ -42,6 +42,7 @@
             <Button fx:id="closeButt" mnemonicParsing="false" onAction="#close" text="Close" />
             <Button fx:id="openButt" mnemonicParsing="false" onAction="#openBay" text="Open bay" />
             <Button fx:id="closeButt" mnemonicParsing="false" onAction="#closeBay" text="Close bay" />
+            <Label fx:id="packTime" text="Pack Time: " />
          </children>
       </VBox>
       <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="2" GridPane.rowIndex="2">
