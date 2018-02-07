@@ -50,8 +50,9 @@ public class readPackets implements Runnable {
 		datInd = 0;
 	}
 	private void printPack(byte[] pack) {
-		for(byte bit : pack)
+		for(byte bit : pack) {
 			System.out.print((char)bit);
+		}
 		System.out.println(" - Pack length: "  + pack.length);
 	}
 	@Override
@@ -85,22 +86,14 @@ public class readPackets implements Runnable {
 					pop = false;
 				} catch (IOException e){}
 			}
-			if(tmp == 'p' && last == '*') {
+			if((tmp == 'p' || tmp == 0x0) && last == '*') {
 				kickStart = true;
 				inPack = true;
 				datPack = new byte[PACKET_LENGTH];
 			}
 			last = tmp;
 			if(!inPack) {
-				if(tmp == DROP_OPEN)
-					log.info("Drop bay open.");
-				else if(tmp == DROP_CLOSE)
-					log.info("Drop bay closed.");
-				else if(tmp == AUTO_ON_CONF)
-					log.info("Auto drop enable confirmed.");
-				else if(tmp == AUTO_OFF_CONF)
-					log.info("Auto drop disable confirmed.");
-				else if(tmp == PACKET_START) { //Start of data packet
+				if(tmp == PACKET_START) { //Start of data packet
 					inPack = true;
 					datPack = new byte[PACKET_LENGTH];
 					datPack[0] = (byte)tmp;
@@ -121,7 +114,26 @@ public class readPackets implements Runnable {
 				datPack[datInd] = (byte)tmp;
 				if(datInd == 1 && (datPack[0] != '*' || datPack[1] != 'p'))
 					reset();
-				if(datPack[datInd] == 'e' && datInd > 1 && datPack[datInd-1] == 'e') {
+				else if(datInd == 2 && datPack[0] == '*' && datPack[1] == 0x0) {
+					if(tmp == DROP_OPEN)
+						log.info("Drop bay open.");
+					else if(tmp == DROP_CLOSE)
+						log.info("Drop bay closed.");
+					else if(tmp == AUTO_ON_CONF)
+						log.info("Auto drop enable confirmed.");
+					else if(tmp == AUTO_OFF_CONF)
+						log.info("Auto drop disable confirmed.");
+					else if(tmp == PACKET_START) { //Start of data packet
+						inPack = true;
+						datPack = new byte[PACKET_LENGTH];
+						datPack[0] = (byte)tmp;
+						datInd++;
+					} else {
+						clear();
+						continue;
+					}
+					clear();
+				} else if(datPack[datInd] == 'e' && datPack[datInd-1] == 'e' && datInd > 1 ) {
 					if(datInd == PACKET_LENGTH - 1) {
 						new Thread(new Runnable() {
 							@Override

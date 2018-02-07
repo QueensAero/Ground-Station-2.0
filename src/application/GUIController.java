@@ -15,8 +15,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -29,47 +31,17 @@ public class GUIController {
 	@FXML
 	GridPane mainPane;
 	@FXML
-	Button closeButt;
-	@FXML
-	Button tempButt;
-	@FXML
-	MenuButton connMenu;
-	@FXML 
-	Button conUpButt;
-	@FXML
-	Button mapUpdate;
-	@FXML
-	MenuButton mapList;
+	MenuButton mapList, connMenu;
 	@FXML
 	TextArea infoPane;
 	@FXML
-	Button discButt;
+	Button connInfo, discButt, mapUpdate, tempButt, closeButt, conUpButt;
 	@FXML
-	Button connInfo;
+	Label vHDOP, packTime, speed, bytesAvail, satNum, height;
 	@FXML
-	Label height;
-	@FXML 
-	Label satNum;
+	Label orginDist, travDist, batLevel, hdop, connState, packetsR, packRateLabel, fixTp;
 	@FXML
-	Label bytesAvail;
-	@FXML
-	Label speed;
-	@FXML
-	Label vHDOP;
-	@FXML
-	Label packTime;
-	
-	//Status labels
-	@FXML
-	protected Label orginDist;
-	@FXML
-	protected Label travDist;
-	@FXML
-	protected Label batLevel;
-	@FXML
-	protected Label hdop;
-	@FXML
-	protected Label connState;
+	Tab connTab;	
 	
 	//Map variables
 	public Canvas mapCan;
@@ -90,7 +62,6 @@ public class GUIController {
 		datM.passComm(comm);	//Passes comm..
 		path = datM.getPath();
 		connButtSt(false);
-		initCanvas();
 		log.fine("Initializing.");
 	}
 	
@@ -106,6 +77,10 @@ public class GUIController {
 		gc.setStroke(Color.BLACK);
 		gc.setLineWidth(3);
 		log.info("Canvas initialized.");
+		gc.moveTo(0,  0);
+		gc.lineTo(100, 100);
+		gc.stroke();
+		System.out.println("Canvas: " + mapCan.isVisible());
 	}
 	//Draws the path of the aircraft from scratch
 	public void drawPath() {
@@ -152,8 +127,8 @@ public class GUIController {
 			log.severe(e.toString());
 			return;
 		}
-		//float scl = getScale(im);
-		gc.drawImage(im, 0, 0, im.getWidth(), im.getHeight());
+		float scl = getScale(im);
+		gc.drawImage(im, 0, 0, scl*im.getWidth(), scl*im.getHeight());
 		log.info("Map drawn");
 	}
 	@FXML
@@ -198,7 +173,6 @@ public class GUIController {
 				public void handle(ActionEvent e) {
 					log.fine(((MenuItem)e.getSource()).getText() + "Prompted for connection.");
 					comm.openConnection(comm.getPortId(((MenuItem)e.getSource()).getText()));
-					//datM.initReadList();
 				}
 			});
 		}

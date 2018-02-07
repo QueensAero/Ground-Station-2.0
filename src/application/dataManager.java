@@ -30,8 +30,6 @@ public class dataManager {
 		cont = _cont;
 		distToOrg = distTrav = battState = HDOP = altAlt = altGPS = speed = sValid = satelites = btsAv = 0;
 		path = new ArrayList<tuple>();
-		buff = ByteBuffer.allocate(16);
-		buff.order(ByteOrder.BIG_ENDIAN);
 		update();
 	}
 	public ArrayList<tuple> getPath() {return path; }
@@ -54,8 +52,11 @@ public class dataManager {
 				cont.height.setText("Height: " + getHeight());
 				cont.satNum.setText("Satellites: " + satelites);
 				cont.bytesAvail.setText("Bytes availible: " + btsAv);
+				cont.packetsR.setText("Packets received: " + comm.packsIn);
+				cont.packRateLabel.setText("Pack rate: " + df.format(comm.packRate) + " packs/s");
 				cont.speed.setText("Speed: " + speed);
 				cont.vHDOP.setText("Time since valid HDOP: " + sValid + "s");
+				cont.fixTp.setText("Fix Type: " + fixType);
 				if(comm != null && comm.getState())
 					cont.connState.setText("Connection state: Connected to " + comm.portName);
 				else
@@ -99,7 +100,6 @@ public class dataManager {
 		int len = set.length;
 		for(int i=0;i<len;i++)
 			out[i] = set[len-i-1];
-		
 		return out;
 	}
 	public void newPacket(byte[] pack, int _btsAv) {
@@ -109,21 +109,21 @@ public class dataManager {
 			System.arraycopy(pack, i, tmp, 0, 4);
 			tmp = flipBytes(tmp);
 			if(i == 2)
-				altAlt = buff.wrap(tmp).getFloat();
+				altAlt = ByteBuffer.wrap(tmp).getFloat();
 			else if(i == 6)
-				speed = buff.wrap(tmp).getFloat();
+				speed = ByteBuffer.wrap(tmp).getFloat();
 			else if(i == 10)
-				lat = buff.wrap(tmp).getFloat();
+				lat = ByteBuffer.wrap(tmp).getFloat();
 			else if(i == 14)
-				lng = buff.wrap(tmp).getFloat();
+				lng = ByteBuffer.wrap(tmp).getFloat();
 			else if(i == 18)
-				HDOP = buff.wrap(tmp).getFloat();
+				HDOP = ByteBuffer.wrap(tmp).getFloat();
 			else if(i == 22)
-				sValid = buff.wrap(tmp).getFloat();
+				sValid = ByteBuffer.wrap(tmp).getFloat();
 			else if(i == 26)
-				altGPS = buff.wrap(tmp).getFloat();
+				altGPS = ByteBuffer.wrap(tmp).getFloat();
 			else if(i == 30)
-				battState = buff.wrap(tmp).getFloat();
+				battState = ByteBuffer.wrap(tmp).getFloat();
 		}
 		newPoint(lat, lng);
 		btsAv = _btsAv;

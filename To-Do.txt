@@ -8,10 +8,9 @@ Critical:
 -Determine what information we need regularily from arduino and change packet
 
 Important:
--Get Logger to flush to file (Coby)
+-Get Logger to flush to file
 -Get Xbee to give connection strength and state
--Fix battery voltage reading
--Get Logger to output to TextArea (Coby)
+-Get Logger to output to TextArea 
 
 
 

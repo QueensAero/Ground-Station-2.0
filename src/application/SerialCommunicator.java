@@ -35,7 +35,8 @@ public class SerialCommunicator {
 	private Thread readThread;
 	private readPackets reader;
 	private Timer timer;
-	private long packetTime;
+	protected long packsIn, packetTime;
+	protected float packRate;
 	
 	//Connection constants
 	private static final int BAUD_RATE = 115200;
@@ -62,6 +63,7 @@ public class SerialCommunicator {
 		timer = new Timer();
 		timer.schedule(new ThreadCheck(), 0, 50);
 		updatePackTime();
+		packsIn = 0;
 	}
 	public void killThread()  {
 		boolean kill = false;
@@ -78,7 +80,11 @@ public class SerialCommunicator {
 		readThread = reader.start();
 		log.severe("Thread was just resuscitated!");
 	}
-    protected void updatePackTime() {packetTime = System.currentTimeMillis(); }
+    protected void updatePackTime() {
+    	packRate = (float)1000/getPackTime();
+    	packetTime = System.currentTimeMillis(); 
+    	packsIn++;
+	}
     protected long getPackTime() {return System.currentTimeMillis() - packetTime; }
 	public boolean threadAlive() {return readThread.isAlive(); }
 	public SerialPort getSerialPort() {return currPort; }
