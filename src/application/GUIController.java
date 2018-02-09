@@ -3,9 +3,15 @@ package application;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.logging.FileHandler;
+import java.util.logging.Handler;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+import java.util.logging.StreamHandler;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -17,6 +23,7 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -46,6 +53,8 @@ public class GUIController {
 	Button discButt;
 	@FXML
 	Button connInfo;
+	@FXML
+	Button cameraControl;
 	
 	//Status labels
 	@FXML
@@ -70,6 +79,7 @@ public class GUIController {
 	dataManager datM;
 	OutputStream infOut;
 	private static final Logger log = Logger.getLogger(GUIController.class.getName());
+	FileHandler filehandle = null;
 	
 	@FXML
 	public void initialize() {
@@ -79,7 +89,47 @@ public class GUIController {
 		comm.passDataM(datM);
 		path = datM.getPath();
 		connButtSt(false);
+		FileHandler filehandle = null;
+		try {
+			filehandle = new FileHandler("output.log");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		TextAreaHandler taHandle = new TextAreaHandler();
+		taHandle.setTextArea(infoPane);
+		//StreamHandler streamhandle = new StreamHandler(taHandle, new SimpleFormatter());
+		log.addHandler(taHandle);
+		log.addHandler(filehandle); 
 		log.fine("Initializing.");
+		
+		
+		cameraControl.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				switch(event.getCode().toString()) {
+				case "W":
+					//infoPane.appendText("Camera going up\n");
+					camUp();
+					log.info("Camera going up\n");
+					break;
+				case "A":
+					//infoPane.appendText("Camera going left\n");
+					camLeft();
+					log.info("Camera going left\n");
+					break;
+				case "S":
+					//infoPane.appendText("Camera going down\n");
+					camDown();
+					log.info("Camera going down\n");
+					break;
+				case "D":
+					//infoPane.appendText("Camera going right\n");
+					camRight();
+					log.info("Camera going right\n");
+					break;
+				}
+			}
+		});
 	}
 	
 	//Initializes the canvas

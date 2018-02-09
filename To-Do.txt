@@ -1,6 +1,6 @@
 Things to do 
--Get Logger to output to TextArea (Coby)
--Get Logger to flush to file (Coby)
+-Get Logger to output to TextArea (Brenden)
+-Get Logger to flush to file (Brenden)
 -Initialize Xbee properly (Ben)
 -Get Xbee to give connection strength and state
 -Actually be able to choose map
@@ -8,4 +8,4 @@ Things to do
 -Measure and track distance from takeoff (Mike - DONE)
 -Get video stream to display in GUI
 -Get backup camera controls to work (Mike - DONE)
--Get window to accept arrow keys for camera control
+-Get window to accept arrow keys for camera control(Brenden)

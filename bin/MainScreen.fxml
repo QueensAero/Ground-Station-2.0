@@ -70,9 +70,10 @@
                     </rowConstraints>
                      <children>
                         <Button fx:id="leftButton" mnemonicParsing="false" onAction="#camLeft" text="Left" GridPane.rowIndex="1" />
-                        <Button mnemonicParsing="false" text="Right" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                        <Button mnemonicParsing="false" text="Down" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Up" GridPane.columnIndex="1" />
+                        <Button fx:id="rightButton" mnemonicParsing="false" onAction="#camRight" text="Right" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <Button fx:id="downButton" mnemonicParsing="false" onAction="#camDown" text="Down" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Button fx:id="upButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#camUp" text="Up" GridPane.columnIndex="1" />
+                        <Button fx:id="cameraControl" mnemonicParsing="false" text="Keyboard" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                      </children>
                   </GridPane>
                </content>
