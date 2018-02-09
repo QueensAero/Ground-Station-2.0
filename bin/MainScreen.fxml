@@ -64,6 +64,7 @@
                         <Button fx:id="rightButton" mnemonicParsing="false" onAction="#camRight" text="Right" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                         <Button fx:id="downButton" mnemonicParsing="false" onAction="#camDown" text="Down" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <Button fx:id="upButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#camUp" text="Up" GridPane.columnIndex="1" />
+                        <Button fx:id="cameraControl" mnemonicParsing="false" text="Keyboard" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                      </children>
                   </GridPane>
                </content>
