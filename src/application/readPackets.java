@@ -49,11 +49,17 @@ public class readPackets implements Runnable {
 		inPack = false;
 		datInd = 0;
 	}
+	private void printPack(byte[] pack) {
+		for(byte bit : pack) {
+			System.out.print((char)bit);
+		}
+		System.out.println(" - Pack length: "  + pack.length);
+	}
 	@Override
 	public void run()  {
 		boolean badRun = false, pop = false, kickStart = false;
 		char tmp = 'e', last = 'k';
-		int st = 0;
+		int st = 0, btsAv = 0;
 		while(true) {
 			//Checks
 			if(Thread.currentThread().isInterrupted()) {
@@ -80,22 +86,14 @@ public class readPackets implements Runnable {
 					pop = false;
 				} catch (IOException e){}
 			}
-			if(tmp == 'p' && last == '*') {
+			if((tmp == 'p' || tmp == 0x0) && last == '*') {
 				kickStart = true;
 				inPack = true;
 				datPack = new byte[PACKET_LENGTH];
 			}
 			last = tmp;
 			if(!inPack) {
-				if(tmp == DROP_OPEN)
-					log.info("Drop bay open.");
-				else if(tmp == DROP_CLOSE)
-					log.info("Drop bay closed.");
-				else if(tmp == AUTO_ON_CONF)
-					log.info("Auto drop enable confirmed.");
-				else if(tmp == AUTO_OFF_CONF)
-					log.info("Auto drop disable confirmed.");
-				else if(tmp == PACKET_START) { //Start of data packet
+				if(tmp == PACKET_START) { //Start of data packet
 					inPack = true;
 					datPack = new byte[PACKET_LENGTH];
 					datPack[0] = (byte)tmp;
@@ -116,45 +114,7 @@ public class readPackets implements Runnable {
 				datPack[datInd] = (byte)tmp;
 				if(datInd == 1 && (datPack[0] != '*' || datPack[1] != 'p'))
 					reset();
-				if(datPack[datInd] == 'e' && datInd > 1 && datPack[datInd-1] == 'e') {
-					if(datInd == PACKET_LENGTH - 1) {
-						//System.out.println("Good packet received.");
-						new Thread(new Runnable() {
-							@Override
-							public void run() {
-								comm.datM.newPacket(datPack);
-							}
-						}).start();
-					}
-					reset();
-				}
-				datInd++;
-			}	
-		}
-	}
-	/*
-	@Override
-	public void run() {
-		boolean badRun = false, pop = false;
-		int badData = 5;
-		char tmp = 'e';
-		while(true) {
-			if(Thread.currentThread().isInterrupted()) {
-				log.info("Thread killed successfully.");
-				return;
-			}
-			if(badData < 5 && !badRun)
-				badData = 5;
-			badRun = false;
-			if(comm.getState() && currPort != null && currPort.bytesAvailable() > 0) {
-				pop = true;
-				while(pop) {
-					try {
-						tmp = (char)byteBuff.remove().byteValue();
-						pop = false;
-					} catch (NoSuchElementException e){}
-				}
-				if(!inPack) {
+				else if(datInd == 2 && datPack[0] == '*' && datPack[1] == 0x0) {
 					if(tmp == DROP_OPEN)
 						log.info("Drop bay open.");
 					else if(tmp == DROP_CLOSE)
@@ -164,38 +124,33 @@ public class readPackets implements Runnable {
 					else if(tmp == AUTO_OFF_CONF)
 						log.info("Auto drop disable confirmed.");
 					else if(tmp == PACKET_START) { //Start of data packet
-						System.out.println("Pack start");
 						inPack = true;
+						datPack = new byte[PACKET_LENGTH];
 						datPack[0] = (byte)tmp;
 						datInd++;
-					}
-					else {
-						log.severe("Bad data received.");
-						badRun = true;
-						if(--badData < 1)
-							clear();
-					}
-				} else if(inPack) { //Data packet
-					datPack[datInd] = (byte)tmp;
-					if(datInd == 1 && (datPack[datInd - 1] != '*' || datPack[datInd] != 'p'))
+					} else {
 						clear();
-					if(datPack[datInd] == 'e' && datInd > 1 && datPack[datInd-1] == 'e') {
-						if(datInd != datPack.length - 1) {
-							log.info("Good packet received.");
-							new Thread(new Runnable() {
-								@Override
-								public void run() {
-									comm.markPack();
+						continue;
+					}
+					clear();
+				} else if(datPack[datInd] == 'e' && datPack[datInd-1] == 'e' && datInd > 1 ) {
+					if(datInd == PACKET_LENGTH - 1) {
+						new Thread(new Runnable() {
+							@Override
+							public void run() {
+								try {
+									comm.updatePackTime();
+									comm.datM.newPacket(datPack, in.available());
+								} catch(IOException e) {
 									comm.datM.newPacket(datPack);
 								}
-							}).start();
-						}
-						else
-							reset();
-					}
-					datInd++;
+							}
+						}).start();
+					} else {printPack(datPack); }
+					reset();
 				}
-			}
+				datInd++;
+			}	
 		}
-	} */
+	}
 }

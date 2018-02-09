@@ -1,20 +1,23 @@
 package application;
 
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.logging.Logger;
-import com.fazecast.jSerialComm.SerialPort;
+import javafx.application.Platform;
 
 public class dataManager {
-	private float distToOrg;
-	private float distTrav;
+	private float distToOrg, distTrav;
 	private ArrayList<tuple> path;
 	private float altAlt, altGPS, speed, HDOP, sValid, battState;
-	private int satelites;
+	private int satelites, btsAv;
 	private String fixType;
 	private GUIController cont;
 	private SerialCommunicator comm;
+	private static ByteBuffer buff;
 	private static final Logger log = Logger.getLogger(dataManager.class.getName());
+	private static final DecimalFormat df = new DecimalFormat("#.##");
 	
 	//Transmission constants (all private by default, not written for clarity)
 	static final char DROP_OPEN = 'o', DROP_CLOSE = 'c', BATT_V = 'b';
@@ -25,22 +28,41 @@ public class dataManager {
 		
 	public dataManager(GUIController _cont) {
 		cont = _cont;
-		distToOrg = distTrav = battState = HDOP = 0;
+		distToOrg = distTrav = battState = HDOP = altAlt = altGPS = speed = sValid = satelites = btsAv = 0;
 		path = new ArrayList<tuple>();
+		update();
 	}
 	public ArrayList<tuple> getPath() {return path; }
 	public void passComm(SerialCommunicator _comm) {comm = _comm; }
+	public void printPackTime() {
+		double packDelta = (double)comm.getPackTime() / 1000;
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {cont.packTime.setText("Pack Time: " + df.format(packDelta) + 's'); }
+		});
+	}
 	private void update() {
-		synchronized(cont) {
-			cont.orginDist.setText("Distance from origin: " + Float.toString(distToOrg) + "m");
-			cont.travDist.setText("Distance travelled: " + Float.toString(distTrav) + "m");
-			cont.batLevel.setText("Battery state: " + Float.toString(battState) + "%");
-			cont.hdop.setText("HDOP: " + Float.toString(HDOP));
-			if(comm != null && comm.getState())
-				cont.connState.setText("Connection state: Connected to " + comm.portName);
-			else
-				cont.connState.setText("Disconnected.");
-		}
+		Platform.runLater(new Runnable()  {
+			@Override
+			public void run() {
+				cont.orginDist.setText("Distance from origin: " + Float.toString(distToOrg) + "m");
+				cont.travDist.setText("Distance travelled: " + Float.toString(distTrav) + "m");
+				cont.batLevel.setText("Battery state: " + df.format(battState) + " V");
+				cont.hdop.setText("HDOP: " + Float.toString(HDOP));
+				cont.height.setText("Height: " + getHeight());
+				cont.satNum.setText("Satellites: " + satelites);
+				cont.bytesAvail.setText("Bytes availible: " + btsAv);
+				cont.packetsR.setText("Packets received: " + comm.packsIn);
+				cont.packRateLabel.setText("Pack rate: " + df.format(comm.packRate) + " packs/s");
+				cont.speed.setText("Speed: " + speed);
+				cont.vHDOP.setText("Time since valid HDOP: " + sValid + "s");
+				cont.fixTp.setText("Fix Type: " + fixType);
+				if(comm != null && comm.getState())
+					cont.connState.setText("Connection state: Connected to " + comm.portName);
+				else
+					cont.connState.setText("Connection state: Disconnected.");
+			}
+		});
 	}
 	public void openBay() {comm.sendByte((byte)DROP_OPEN); }
 	public void closeBay() {comm.sendByte((byte)DROP_CLOSE); }
@@ -68,11 +90,24 @@ public class dataManager {
 	}
 	public float getDistanceTraveled(){return distTrav; }
 	public float distanceFromStart(){return distToOrg; }
-	public void newPacket(byte[] pack) {
+	public void newPacket(byte[] pack) {newPacket(pack, -1); }
+	private byte[] flipBytes(byte[] set) {
+		if(set.length % 2 != 0)
+			return set;
+		byte[] out = new byte[set.length];
+		//for(int i=0;i<set.length;i++)
+		//	set[i] = (byte)((byte)(set[i] << 4) | (set[i] >> 4));
+		int len = set.length;
+		for(int i=0;i<len;i++)
+			out[i] = set[len-i-1];
+		return out;
+	}
+	public void newPacket(byte[] pack, int _btsAv) {
 		float lat = 0, lng = 0;
 		for(int i=2;i<31;i+=4) {
 			byte[] tmp = new byte[4];
 			System.arraycopy(pack, i, tmp, 0, 4);
+			tmp = flipBytes(tmp);
 			if(i == 2)
 				altAlt = ByteBuffer.wrap(tmp).getFloat();
 			else if(i == 6)
@@ -91,12 +126,12 @@ public class dataManager {
 				battState = ByteBuffer.wrap(tmp).getFloat();
 		}
 		newPoint(lat, lng);
+		btsAv = _btsAv;
 		try {
 			fixType = FIX_TYPE[pack[34]];
 			satelites = pack[35];
-			System.out.println(fixType + " " + satelites + " " + battState);
 		} catch(ArrayIndexOutOfBoundsException e) {log.severe("You fucked up... fix type doesn't exist"); }
-		//update();
-		//System.out.println("Parsed packet successfully.");
+		update();
 	}
+	public float getHeight() {return (altAlt + altGPS) / 2; }
 }

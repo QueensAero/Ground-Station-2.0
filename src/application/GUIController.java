@@ -21,9 +21,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -36,37 +38,20 @@ public class GUIController {
 	@FXML
 	GridPane mainPane;
 	@FXML
-	Button closeButt;
-	@FXML
-	Button tempButt;
-	@FXML
-	MenuButton connMenu;
-	@FXML 
-	Button conUpButt;
-	@FXML
-	Button mapUpdate;
-	@FXML
-	MenuButton mapList;
+	MenuButton mapList, connMenu;
 	@FXML
 	TextArea infoPane;
 	@FXML
-	Button discButt;
-	@FXML
-	Button connInfo;
+	Button connInfo, discButt, mapUpdate, tempButt, closeButt, conUpButt;
 	@FXML
 	Button cameraControl;
 	
 	//Status labels
+	Label vHDOP, packTime, speed, bytesAvail, satNum, height;
 	@FXML
-	protected Label orginDist;
+	Label orginDist, travDist, batLevel, hdop, connState, packetsR, packRateLabel, fixTp;
 	@FXML
-	protected Label travDist;
-	@FXML
-	protected Label batLevel;
-	@FXML
-	protected Label hdop;
-	@FXML
-	protected Label connState;
+	Tab connTab;	
 	
 	//Map variables
 	public Canvas mapCan;
@@ -83,10 +68,9 @@ public class GUIController {
 	
 	@FXML
 	public void initialize() {
-		comm = new SerialCommunicator(this);	//Raw communication with Xbee
 		datM = new dataManager(this);	//Works with bytes from comm
+		comm = new SerialCommunicator(this, datM);	//Raw communication with Xbee
 		datM.passComm(comm);	//Passes comm..
-		comm.passDataM(datM);
 		path = datM.getPath();
 		connButtSt(false);
 		FileHandler filehandle = null;
@@ -143,7 +127,11 @@ public class GUIController {
 		gc = mapCan.getGraphicsContext2D();
 		gc.setStroke(Color.BLACK);
 		gc.setLineWidth(3);
-		log.fine("Canvas initialized.");
+		log.info("Canvas initialized.");
+		gc.moveTo(0,  0);
+		gc.lineTo(100, 100);
+		gc.stroke();
+		System.out.println("Canvas: " + mapCan.isVisible());
 	}
 	//Draws the path of the aircraft from scratch
 	public void drawPath() {
@@ -192,7 +180,7 @@ public class GUIController {
 		}
 		float scl = getScale(im);
 		gc.drawImage(im, 0, 0, scl*im.getWidth(), scl*im.getHeight());
-		log.fine("Map drawn");
+		log.info("Map drawn");
 	}
 	@FXML
 	public void checkThread() {
@@ -236,7 +224,6 @@ public class GUIController {
 				public void handle(ActionEvent e) {
 					log.fine(((MenuItem)e.getSource()).getText() + "Prompted for connection.");
 					comm.openConnection(comm.getPortId(((MenuItem)e.getSource()).getText()));
-					//datM.initReadList();
 				}
 			});
 		}

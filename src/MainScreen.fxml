@@ -27,15 +27,6 @@
   </rowConstraints>
    <children>
       <Pane fx:id="MapPane" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowSpan="2" />
-      <VBox prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.halignment="CENTER" GridPane.rowIndex="2">
-         <children>
-            <Label fx:id="orginDist" text="Distance from origin:" />
-            <Label fx:id="travDist" text="Distance travelled:" />
-            <Label fx:id="batLevel" text="Battery state" />
-            <Label fx:id="hdop" text="HDOP:" />
-            <Label fx:id="connState" text="Connection state: " />
-         </children>
-      </VBox>
       <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
          <children>
             <Label text="Info stream" />
@@ -117,6 +108,48 @@
                      <padding>
                         <Insets top="4.0" />
                      </padding>
+                  </VBox>
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" GridPane.rowIndex="2">
+        <tabs>
+          <Tab text="General">
+               <content>
+                  <VBox prefHeight="200.0" prefWidth="100.0" spacing="3.0">
+                     <children>
+                        <Label fx:id="orginDist" text="Distance from origin:" />
+                        <Label fx:id="travDist" text="Distance travelled:" />
+                        <Label fx:id="batLevel" text="Battery state: " />
+                        <Label fx:id="height" text="Height: " />
+                        <Label fx:id="speed" text="Speed:" />
+                     </children>
+                  </VBox>
+               </content>
+            </Tab>
+          <Tab fx:id="connTab" text="Connection">
+               <content>
+                  <VBox prefHeight="200.0" prefWidth="100.0" spacing="3.0">
+                     <children>
+                        <Label fx:id="connState" text="Connection state: " />
+                        <Label fx:id="packTime" text="Pack Time: " />
+                        <Label fx:id="bytesAvail" text="Bytes availible: " />
+                        <Label fx:id="packetsR" text="Packets received: " />
+                        <Label fx:id="packRateLabel" text="Pack rate: " />
+                     </children>
+                  </VBox>
+               </content>
+            </Tab>
+            <Tab text="GPS">
+               <content>
+                  <VBox prefHeight="200.0" prefWidth="100.0" spacing="4.0">
+                     <children>
+                        <Label fx:id="hdop" text="HDOP:" />
+                        <Label fx:id="vHDOP" text="Time since valid HDOP: " />
+                        <Label fx:id="satNum" text="Satellites" />
+                        <Label fx:id="fixTp" text="Fix Type: " />
+                     </children>
                   </VBox>
                </content>
             </Tab>
