@@ -1,8 +1,11 @@
 package application;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.logging.Logger;
@@ -18,11 +21,11 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import org.json.*;
 
 public class GUIController {
 	//FXML declarations
@@ -48,6 +51,8 @@ public class GUIController {
 	private ArrayList<tuple> path; 
 	private GraphicsContext gc;
 	private int lastPoint;
+	private JSONObject mapData;
+	private String mapName;
 	
 	//Communication
 	SerialCommunicator comm;
@@ -118,10 +123,14 @@ public class GUIController {
 	}
 	//Draws the map onto the page
 	public void drawMap() {
+		if(mapName == null)  {
+			log.severe("Map doesn't exist!");
+			return;
+		}
 		initCanvas();
 		Image im;
 		try {
-			im = new Image(new FileInputStream("queens.jpg"));
+			im = new Image(new FileInputStream(mapName + ".jpg"));
 		} catch (FileNotFoundException e) {
 			log.severe("Map file not found.");
 			log.severe(e.toString());
@@ -171,8 +180,13 @@ public class GUIController {
 			newItem.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent e) {
-					log.fine(((MenuItem)e.getSource()).getText() + "Prompted for connection.");
-					comm.openConnection(comm.getPortId(((MenuItem)e.getSource()).getText()));
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							log.fine(((MenuItem)e.getSource()).getText() + "Prompted for connection.");
+							comm.openConnection(comm.getPortId(((MenuItem)e.getSource()).getText()));
+						}
+					}).start();
 				}
 			});
 		}
@@ -181,11 +195,25 @@ public class GUIController {
 	public void upMaps() {
 		File fold = new File(System.getProperty("user.dir"));
 		String tmp = new String();
+		ArrayList<String> data = getMapDataAvail();
+		MenuItem tmpItem;
+		System.out.println(data);
 		mapList.getItems().clear();
 		for(File fl : fold.listFiles()) {
-			tmp = fl.getName().substring(fl.getName().length()-3);
-			if(tmp.equals("jpg"))
-				mapList.getItems().add(new MenuItem(fl.getName()));
+			if((tmp = fl.getName()).length() > 3 
+					&& tmp.substring(tmp.length()-3).equals("jpg") 
+					&& data.contains(tmp.substring(0, tmp.length()-4))) {
+				tmpItem = new MenuItem(tmp.substring(0, tmp.length()-4));
+				mapList.getItems().add(tmpItem);
+				
+				tmpItem.setOnAction(new EventHandler<ActionEvent>() {
+					@Override 
+					public void handle(ActionEvent e) {
+						mapName = ((MenuItem)e.getSource()).getText();
+						drawMap();
+					}
+				});
+			}
 		}
 		log.fine("Updated list of maps");
 	}
@@ -198,6 +226,27 @@ public class GUIController {
 	public void connButtSt(boolean st) {
 		discButt.setDisable(!st);
 		connInfo.setDisable(!st);
+	}
+	public ArrayList<String> getMapDataAvail() {
+		ArrayList<String> data = new ArrayList<>();
+		String tmp = new String();
+		File fold = new File(System.getProperty("user.dir"));
+		for(File fl : fold.listFiles()) {
+			if((tmp = fl.getName()).length() > 4 && tmp.substring(tmp.length()-4).equals("json"))
+				data.add(tmp.substring(0, tmp.length()-5));
+		}
+		return data;
+	}
+	public void getMapData(String fileName) {
+		JSONObject obj = null;
+		double lat, lng;
+		try {
+			obj = new JSONObject(new BufferedReader(new FileReader(new File(fileName))).readLine());
+		} catch (JSONException | IOException e) {
+			log.severe("Failed to load map data!");
+			e.printStackTrace();
+		}
+		
 	}
 	public void getConInfo()  {comm.getConnInfo(); }
 	public void openBay() {datM.openBay();	}

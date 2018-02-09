@@ -11,6 +11,7 @@ Important:
 -Get Logger to flush to file
 -Get Xbee to give connection strength and state
 -Get Logger to output to TextArea 
+-Calculate voltage vs. batt % curve and give + battery warning
 
 
 
