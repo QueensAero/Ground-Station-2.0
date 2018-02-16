@@ -28,7 +28,7 @@ public class readPackets implements Runnable {
 		comm = _comm;
 		reset();
 		datPack = new byte[PACKET_LENGTH];
-		log.info("Started reader thread.");
+		log.fine("Reader thread up.");
 	}
 	private void clear() {
 		log.severe("Clearing");
@@ -59,7 +59,6 @@ public class readPackets implements Runnable {
 	public void run()  {
 		boolean badRun = false, pop = false, kickStart = false;
 		char tmp = 'e', last = 'k';
-		int st = 0, btsAv = 0;
 		while(true) {
 			//Checks
 			if(Thread.currentThread().isInterrupted()) {

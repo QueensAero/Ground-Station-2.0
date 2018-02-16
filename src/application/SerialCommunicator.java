@@ -9,7 +9,6 @@ package application;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Timer;
@@ -30,13 +29,13 @@ public class SerialCommunicator {
 	private GUIController contrl;
 	protected dataManager datM;
 	protected String portName;
-	protected CharBuffer incBuff;
 	protected SynchronousQueue<Byte> byteBuff;
-	private Thread readThread;
+	private static Thread readThread;
 	private readPackets reader;
 	private Timer timer;
 	protected long packsIn, packetTime;
 	protected float packRate;
+	private static boolean hold;
 	
 	//Connection constants
 	private static final int BAUD_RATE = 115200;
@@ -44,41 +43,63 @@ public class SerialCommunicator {
     private static final int INTO_CMD_MODE_TIMEOUT = 3000, RESPONSE_TIMEOUT = 750;
 	
     class ThreadCheck extends TimerTask  {
+    	public boolean running;
     	@Override
     	public void run() {
-    		datM.printPackTime();
-    		resuscitate();
+    		try {
+    			datM.printPackTime();
+    		} catch(Exception e) {
+    			log.severe("Pack time error!");
+    			e.printStackTrace();
+    		}
+    		try {
+        		resuscitate();
+    		} catch(Exception e) {
+    			log.severe("Reader thread error!");
+    			e.printStackTrace();
+    		}
+    		contrl.updateWarnStyle();
     	}
     }
     
 	//Constructor
 	public SerialCommunicator(GUIController cont, dataManager _datM) {
-		updateCommList();
+		hold = false;
 		datM = _datM;
-		connected = false;
 		contrl = cont;
-		incBuff = CharBuffer.allocate(256);
+		datM.passComm(this);
+		connected = false;
 		byteBuff = new SynchronousQueue<Byte>();
 		resuscitate();
-		timer = new Timer();
-		timer.schedule(new ThreadCheck(), 0, 50);
+		packsIn = -1;
 		updatePackTime();
-		packsIn = 0;
 	}
 	public void killThread()  {
+		timer.cancel();
 		boolean kill = false;
 		while(!kill) {
 			readThread.interrupt();
 			kill = !readThread.isAlive();
 		}
-		timer.cancel();
 	}
 	public void resuscitate() {
-		if(readThread != null && readThread.isAlive())
+		if(hold)
 			return;
-		reader = new readPackets(byteBuff, this);
-		readThread = reader.start();
-		log.severe("Thread was just resuscitated!");
+		hold = true;
+		boolean read = readThread == null, time = timer == null;
+		if(time) {
+			timer = new Timer();
+			timer.schedule(new ThreadCheck(), 0, 100);
+			log.severe("Timer was started!");
+		}
+		
+		if(read || !readThread.isAlive()) {
+			reader = new readPackets(byteBuff, this);
+			readThread = reader.start();
+			if(read)
+				log.severe("Thread was just resuscitated!");
+		}
+		hold = false;
 	}
     protected void updatePackTime() {
     	packRate = (float)1000/getPackTime();
@@ -89,6 +110,11 @@ public class SerialCommunicator {
 	public boolean threadAlive() {return readThread.isAlive(); }
 	public SerialPort getSerialPort() {return currPort; }
 	protected InputStream getInputStream() {return in; }
+	public boolean getPortStatus() {
+		if(currPort != null)
+			return currPort.isOpen(); 
+		return false;
+	}
 	public void updateCommList() {commList = new ArrayList<SerialPort>(Arrays.asList(SerialPort.getCommPorts())); }
 	public ArrayList<String> getCommList() {
 		updateCommList();

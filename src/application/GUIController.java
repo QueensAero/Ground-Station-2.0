@@ -13,6 +13,8 @@ import java.util.logging.Handler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import java.util.logging.StreamHandler;
+
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -49,19 +51,32 @@ public class GUIController {
 	Button cameraControl;
 	
 	//Status labels
-	Label vHDOP, packTime, speed, bytesAvail, satNum, height;
+	@FXML
+	Label vHDOP, packTime, speed, bytesAvail, satNum, heightL;
 	@FXML
 	Label orginDist, travDist, batLevel, hdop, connState, packetsR, packRateLabel, fixTp;
+	//Warnings
 	@FXML
-	Tab connTab;	
+	Label xbeeState, GPSState, battState, serialState;
+	private boolean xbeeWarn, GPSWarn, battWarn, serialWarn, warnChange;
+	
+	public void setXW(boolean st) {xbeeWarn = st; warnC(); }
+	public void setGW(boolean st) {GPSWarn = st; warnC(); }
+	public void setBW(boolean st) {battWarn = st; warnC(); }
+	public void setSW(boolean st) {serialWarn = st; warnC(); }
+	public boolean getXW() {return xbeeWarn; }
+	public boolean getGW() {return GPSWarn; }
+	public boolean getBW() {return battWarn; }
+	public boolean getSW() {return serialWarn; }
+	private void warnC() {warnChange = true; }
 	
 	//Map variables
 	public Canvas mapCan;
 	private ArrayList<tuple> path; 
 	private GraphicsContext gc;
 	private int lastPoint;
-	private JSONObject mapData;
 	private String mapName;
+	private double baseLng, baseLat, topLng, topLat;
 	
 	//Communication
 	SerialCommunicator comm;
@@ -74,7 +89,6 @@ public class GUIController {
 	public void initialize() {
 		datM = new dataManager(this);	//Works with bytes from comm
 		comm = new SerialCommunicator(this, datM);	//Raw communication with Xbee
-		datM.passComm(comm);	//Passes comm..
 		path = datM.getPath();
 		connButtSt(false);
 		FileHandler filehandle = null;
@@ -85,36 +99,31 @@ public class GUIController {
 		}
 		TextAreaHandler taHandle = new TextAreaHandler();
 		taHandle.setTextArea(infoPane);
-		//StreamHandler streamhandle = new StreamHandler(taHandle, new SimpleFormatter());
 		log.addHandler(taHandle);
 		log.addHandler(filehandle); 
 		log.fine("Initializing.");
-		
+		xbeeWarn = GPSWarn = battWarn = serialWarn = true;
 		
 		cameraControl.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
 				switch(event.getCode().toString()) {
-				case "W":
-					//infoPane.appendText("Camera going up\n");
-					camUp();
-					log.info("Camera going up\n");
-					break;
-				case "A":
-					//infoPane.appendText("Camera going left\n");
-					camLeft();
-					log.info("Camera going left\n");
-					break;
-				case "S":
-					//infoPane.appendText("Camera going down\n");
-					camDown();
-					log.info("Camera going down\n");
-					break;
-				case "D":
-					//infoPane.appendText("Camera going right\n");
-					camRight();
-					log.info("Camera going right\n");
-					break;
+					case "W":
+						camUp();
+						log.fine("Camera going up\n");
+						break;
+					case "A":
+						camLeft();
+						log.fine("Camera going left\n");
+						break;
+					case "S":
+						camDown();
+						log.fine("Camera going down\n");
+						break;
+					case "D":
+						camRight();
+						log.fine("Camera going right\n");
+						break;
 				}
 			}
 		});
@@ -132,10 +141,6 @@ public class GUIController {
 		gc.setStroke(Color.BLACK);
 		gc.setLineWidth(3);
 		log.info("Canvas initialized.");
-		gc.moveTo(0,  0);
-		gc.lineTo(100, 100);
-		gc.stroke();
-		System.out.println("Canvas: " + mapCan.isVisible());
 	}
 	//Draws the path of the aircraft from scratch
 	public void drawPath() {
@@ -177,6 +182,7 @@ public class GUIController {
 			log.severe("Map doesn't exist!");
 			return;
 		}
+		if(!getMapData(mapName)) {return; }
 		initCanvas();
 		Image im;
 		try {
@@ -189,6 +195,7 @@ public class GUIController {
 		float scl = getScale(im);
 		gc.drawImage(im, 0, 0, scl*im.getWidth(), scl*im.getHeight());
 		log.info("Map drawn");
+		getMapData(mapName);
 	}
 	@FXML
 	public void checkThread() {
@@ -247,7 +254,6 @@ public class GUIController {
 		String tmp = new String();
 		ArrayList<String> data = getMapDataAvail();
 		MenuItem tmpItem;
-		System.out.println(data);
 		mapList.getItems().clear();
 		for(File fl : fold.listFiles()) {
 			if((tmp = fl.getName()).length() > 3 
@@ -287,16 +293,74 @@ public class GUIController {
 		}
 		return data;
 	}
-	public void getMapData(String fileName) {
-		JSONObject obj = null;
-		double lat, lng;
+	public boolean getMapData(String fileName) {
+		JSONObject obj = null, tmp;
+		tuple[] tp = new tuple[2];
 		try {
-			obj = new JSONObject(new BufferedReader(new FileReader(new File(fileName))).readLine());
+			BufferedReader br = new BufferedReader(new FileReader(new File(fileName + ".json")));
+			String st = br.readLine();
+			br.close();
+			obj = new JSONObject(st);
 		} catch (JSONException | IOException e) {
 			log.severe("Failed to load map data!");
 			e.printStackTrace();
+			return false;
 		}
+		JSONArray arr = obj.getJSONArray("data");
+		try {
+			baseLng = (double)((JSONObject)(arr.get(0))).get("long");
+			baseLng = (double)((JSONObject)(arr.get(0))).get("lat");
+			topLng = (double)((JSONObject)(arr.get(1))).get("long");
+			topLng = (double)((JSONObject)(arr.get(1))).get("lat");
+		} catch(JSONException e)  {
+			log.severe("Error getting JSON map data.");
+			log.severe(e.toString());	
+			return false;
+		}
+		return true;
+	}
+	private tuple toCanvas(float lng, float lat) {
+		if(lng < baseLng || lng > topLng || lat < baseLat || lat > topLat)
+			return new tuple(-1, -1);
+		double xScale = (float) (Math.abs(topLng - baseLng) / mapCan.getWidth());
+		double yScale = (float) (Math.abs(topLat - baseLat) / mapCan.getHeight());
 		
+		return new tuple(Math.abs(lng - baseLng)*xScale, Math.abs(lat - baseLat)*yScale);
+	}
+	public String getStyleStr(boolean tp) {
+		if(tp)
+			return "-fx-font-weight: bold;";
+		return "-fx-font-weight: normal;";
+	}
+	public String getStateStr(boolean tp) {
+		if(tp)
+			return "Normal";
+		return "WARNING";
+	}
+	public void updateWarnText() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				serialState.setText("Serial State: " + getStateStr(serialWarn));
+				xbeeState.setText("Xbee State: " + getStateStr(xbeeWarn));
+				GPSState.setText("GPS State: " + getStateStr(GPSWarn));
+				battState.setText("Battery State: " + getStateStr(battWarn));
+			}
+		});
+	}
+	public void updateWarnStyle() {
+		if(!warnChange)
+			return;
+		warnChange = false;
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				serialState.setStyle(getStyleStr(serialWarn));
+				xbeeState.setStyle(getStyleStr(xbeeWarn));
+				GPSState.setStyle(getStyleStr(GPSWarn));
+				battState.setStyle(getStyleStr(battWarn));
+			}
+		});	
 	}
 	public void getConInfo()  {comm.getConnInfo(); }
 	public void openBay() {datM.openBay();	}

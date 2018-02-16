@@ -1,7 +1,6 @@
 package application;
 
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.logging.Logger;
@@ -15,7 +14,6 @@ public class dataManager {
 	private String fixType;
 	private GUIController cont;
 	private SerialCommunicator comm;
-	private static ByteBuffer buff;
 	private static final Logger log = Logger.getLogger(dataManager.class.getName());
 	private static final DecimalFormat df = new DecimalFormat("#.##");
 	
@@ -34,14 +32,35 @@ public class dataManager {
 	}
 	public ArrayList<tuple> getPath() {return path; }
 	public void passComm(SerialCommunicator _comm) {comm = _comm; }
+	public void statusChecks(double packDelta) {
+		boolean badConn = false;
+		//Xbee Connection
+		if(packDelta > 2) {
+			cont.setXW(true);
+			badConn = true;
+		}
+		else if(cont.getXW())
+			cont.setXW(false);
+		else if(cont.getSW())
+			cont.setSW(false);
+		//GPS Connection
+		if(badConn && !comm.getPortStatus())
+			cont.setSW(true);
+		if(battState < 9.5 && cont.getBW())
+			cont.setBW(true);
+		else if(cont.getBW())
+			cont.setBW(false);
+	}
 	public void printPackTime() {
 		double packDelta = (double)comm.getPackTime() / 1000;
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {cont.packTime.setText("Pack Time: " + df.format(packDelta) + 's'); }
 		});
+		statusChecks(packDelta);
 	}
 	private void update() {
+		cont.updateWarnText();
 		Platform.runLater(new Runnable()  {
 			@Override
 			public void run() {
@@ -49,7 +68,7 @@ public class dataManager {
 				cont.travDist.setText("Distance travelled: " + Float.toString(distTrav) + "m");
 				cont.batLevel.setText("Battery state: " + df.format(battState) + " V");
 				cont.hdop.setText("HDOP: " + Float.toString(HDOP));
-				cont.height.setText("Height: " + getHeight());
+				cont.heightL.setText("Height: " + getHeight());
 				cont.satNum.setText("Satellites: " + satelites);
 				cont.bytesAvail.setText("Bytes availible: " + btsAv);
 				cont.packetsR.setText("Packets received: " + comm.packsIn);
@@ -81,8 +100,8 @@ public class dataManager {
 		}		
 	}
 	private float getDistance(tuple loc1, tuple loc2){
-		float dlatt = loc2.x-loc1.x;
-		float dlong = loc2.y-loc1.y;
+		double dlatt = loc2.x-loc1.x;
+		double dlong = loc2.y-loc1.y;
 		double a = Math.pow(Math.sin(dlatt/2),2) + Math.cos(loc1.x) * Math.cos(loc2.x) * Math.pow(Math.sin(dlong/2),2);
 		float c = (float) (2 * Math.atan2(Math.sqrt(a),Math.sqrt(1-a)));
 		float dist = 6371 * c;
