@@ -53,37 +53,51 @@ public class KMLStore {
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBuilder;
 		try {
+			//Start document builders
 			docBuilder = docFactory.newDocumentBuilder();
 			Document KMLOut = docBuilder.newDocument();
-			Element root = KMLOut.createElement("kml");
+			//Base of document
+			Element preRoot = KMLOut.createElement("kml");
 			Attr KMLTp = KMLOut.createAttribute("xmlns");
 			KMLTp.setValue("http://www.opengis.net/kml/2.2");
-			KMLOut.appendChild(root);
-			root.setAttributeNode(KMLTp);
+			KMLOut.appendChild(preRoot);
+			preRoot.setAttributeNode(KMLTp);
+			//Create folder for points
+			Element root = KMLOut.createElement("Folder");
+			preRoot.appendChild(root);
 			log.log(Level.FINER, "Document created.");
 			
+			/*
+			 * KML -> preRoot
+			 * 	Folder -> root
+			 * 	 Placemark -> newBit
+			 * 	  name -> id
+			 * 	  Point -> pt
+			 * 	   coordinates -> coordinates
+			 */
 			for(Placemark cord : coords)  {
-				String cordStr = new String();
-				cordStr = Float.toString(cord.getLat()) + "," + Float.toString(cord.getLng()) + ",0";
+				//Create Placemark
 				Element newBit = KMLOut.createElement("Placemark");
-				Element id = KMLOut.createElement(cord.name);
-				Element pt = KMLOut.createElement("Point");
-				Element coordinates = KMLOut.createElement("coordinates");
-				
 				root.appendChild(newBit);
-				newBit.appendChild(id);
-				newBit.appendChild(pt);
-				pt.appendChild(coordinates);
-				
+				//Add name
+				Element id = KMLOut.createElement("name");
 				id.appendChild(KMLOut.createTextNode(cord.getName()));
-				pt.appendChild(KMLOut.createTextNode(cordStr));
-				log.log(Level.FINEST, "Coordinate added.");
+				newBit.appendChild(id);
+				//Add point
+				Element pt = KMLOut.createElement("Point");
+				newBit.appendChild(pt);
+				//Add coordinates
+				Element coordinates = KMLOut.createElement("coordinates");
+				String cordStr = Float.toString(cord.getLat()) + "," + Float.toString(cord.getLng()) + ",0";
+				coordinates.appendChild(KMLOut.createTextNode(cordStr));
+				pt.appendChild(coordinates);
+				log.log(Level.FINEST, "Coordinate added."); 
 			}
 			
 			TransformerFactory factory = TransformerFactory.newInstance();
 			Transformer trans = factory.newTransformer();
 			DOMSource source = new DOMSource(KMLOut);
-			StreamResult output = new StreamResult(new File("KMLOut.xml"));
+			StreamResult output = new StreamResult(new File("KMLOut.kml"));
 			trans.transform(source, output);
 			log.log(Level.INFO, "Document exported successfully.");
 			
@@ -101,9 +115,9 @@ public class KMLStore {
 	/*
 	public static void main(String args[]) {
 		KMLStore sv = new KMLStore();
-		sv.addCord("One", 1, 2);
-		sv.addCord("Two", 3, 4);
-		sv.addCord("Three", 5, 6);
+		sv.addCord("One", (float)44.224455, (float)-76.498260);
+		sv.addCord("Two", (float)44.229315, (float)-76.486250);
+		//sv.addCord("Three", 44.229315, -76.486250);
 		sv.exportKML();
 	} */
 }
