@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
@@ -59,6 +60,7 @@
             <Button fx:id="closeButt" mnemonicParsing="false" onAction="#close" text="Close" />
             <Button fx:id="openButt" mnemonicParsing="false" onAction="#openBay" text="Open bay" />
             <Button fx:id="closeButt" mnemonicParsing="false" onAction="#closeBay" text="Close bay" />
+            <Button mnemonicParsing="false" onAction="#testDraw" text="test" />
          </children>
          <padding>
             <Insets left="4.0" />
@@ -123,6 +125,9 @@
                            </children>
                         </HBox>
                         <Button fx:id="mapButt" mnemonicParsing="false" onAction="#drawMap" text="Draw map" />
+                        <Label fx:id="mapTop" text="Map top: " />
+                        <Label fx:id="mapBase" text="Map base: " />
+                        <Label fx:id="onMapStatus" text="Currently: " />
                      </children>
                      <padding>
                         <Insets left="4.0" top="4.0" />
@@ -186,6 +191,7 @@
                               <Label fx:id="vHDOP" text="Time since valid HDOP: " />
                               <Label fx:id="satNum" text="Satellites" />
                               <Label fx:id="fixTp" text="Fix Type: " />
+                              <Label fx:id="pointsTaken" text="Points taken:" />
                            </children>
                            <padding>
                               <Insets left="4.0" top="4.0" />
@@ -210,6 +216,7 @@
                   <Label text="Xbee State:" fx:id="xbeeState" />
                   <Label fx:id="GPSState" text="GPS State:" />
                   <Label fx:id="battState" text="Battery State:" />
+                  <Label fx:id="mapState" text="Out of map:" />
                </children>
                <padding>
                   <Insets left="4.0" />
@@ -220,6 +227,7 @@
             </VBox>
          </children>
       </GridPane>
+      <Canvas fx:id="testCan" height="200.0" width="200.0" GridPane.columnIndex="2" />
    </children>
    <padding>
       <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />

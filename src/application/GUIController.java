@@ -46,19 +46,20 @@ public class GUIController {
 	@FXML
 	TextArea infoPane;
 	@FXML
-	Button connInfo, discButt, mapUpdate, tempButt, closeButt, conUpButt;
-	@FXML
-	Button cameraControl;
-	
+	Button connInfo, discButt, mapUpdate, tempButt, closeButt, conUpButt, cameraControl;
+
 	//Status labels
 	@FXML
-	Label vHDOP, packTime, speed, bytesAvail, satNum, heightL;
+	Canvas testCan, mapCan;
+	@FXML
+	Label vHDOP, packTime, speed, bytesAvail, satNum, heightL, pointsTaken, mapTop, mapBase;
 	@FXML
 	Label orginDist, travDist, batLevel, hdop, connState, packetsR, packRateLabel, fixTp;
+	
 	//Warnings
 	@FXML
-	Label xbeeState, GPSState, battState, serialState;
-	private boolean xbeeWarn, GPSWarn, battWarn, serialWarn, warnChange;
+	Label xbeeState, GPSState, battState, serialState, mapState, onMapStatus;
+	private boolean xbeeWarn, GPSWarn, battWarn, serialWarn, warnChange, mapWarn;
 	
 	public void setXW(boolean st) {xbeeWarn = st; warnC(); }
 	public void setGW(boolean st) {GPSWarn = st; warnC(); }
@@ -71,12 +72,13 @@ public class GUIController {
 	private void warnC() {warnChange = true; }
 	
 	//Map variables
-	public Canvas mapCan;
+	//public Canvas mapCan;
 	private ArrayList<tuple> path; 
 	private GraphicsContext gc;
-	private int lastPoint;
+	protected int lastPoint = -1, mapRel = 0, pt = -1;
 	private String mapName;
 	private double baseLng, baseLat, topLng, topLat;
+	private float baseXOffset = 0, baseYOffset = 0;
 	
 	//Communication
 	SerialCommunicator comm;
@@ -102,7 +104,7 @@ public class GUIController {
 		log.addHandler(taHandle);
 		log.addHandler(filehandle); 
 		log.fine("Initializing.");
-		xbeeWarn = GPSWarn = battWarn = serialWarn = true;
+		xbeeWarn = GPSWarn = battWarn = serialWarn = mapWarn = true;
 		
 		cameraControl.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
@@ -138,8 +140,8 @@ public class GUIController {
 		mapCan.setTranslateX(MapPane.getLayoutX());
 		mapCan.setTranslateY(MapPane.getLayoutY());
 		gc = mapCan.getGraphicsContext2D();
-		gc.setStroke(Color.BLACK);
-		gc.setLineWidth(3);
+		gc.setStroke(Color.RED);
+		gc.setLineWidth(5);
 		log.info("Canvas initialized.");
 	}
 	//Draws the path of the aircraft from scratch
@@ -150,31 +152,71 @@ public class GUIController {
 			updatePath();
 			return;
 		}
+		gc.setStroke(Color.RED);
+		gc.setLineWidth(3);
+		tuple pt;
 		gc.beginPath();
-		for(tuple pt : path) {
-			if(pt == path.get(0))
+		for(tuple _pt : path) {
+			pt = toCanvas(_pt);
+			if(pt.x == -1)
+				continue;
+			/*
+			else if(pt == path.get(0))
 				gc.moveTo(pt.x, pt.y);
 			else
 				gc.lineTo(pt.x, pt.y);
+				*/
+			else
+				gc.strokeRect(pt.x, pt.y, 4, 4);
 		}
 		lastPoint = path.size() - 1;
 		gc.stroke();
-		log.fine("Path drawn.");
+		log.info("Path drawn.");
+	}
+	public void testDraw() {
+		ArrayList<tuple> arr = new ArrayList<>();
+		arr.add(new tuple(baseLng, baseLat));
+		arr.add(new tuple(baseLng, topLat));
+		arr.add(new tuple(topLng, topLat));
+		arr.add(new tuple(topLng, baseLat));
+		
+		//ILC and Union-University
+		arr.add(new tuple(-76.492984, 44.227752));
+		arr.add(new tuple(-76.495606, 44.227921));
+		
+		for(int i=0;i<10;i++) 
+			arr.add(new tuple(-76.495618 + 0.000100*i, 44.227920));
+		
+		if(pt >= arr.size()) {return; }
+		gc.setStroke(Color.RED);
+		gc.setLineWidth(5);
+		tuple point = toCanvas(arr.get(++pt));
+		gc.strokeRect(point.x, point.y, 10, 10);
+		
+		log.info("Point drawn.");
 	}
 	//Updates the path (as not to redraw all previous points
 	public void updatePath() {
 		if(path.size() == lastPoint + 1)
 			return;
+		gc.setStroke(Color.RED);
+		gc.setLineWidth(3);
 		int i;
+		tuple pt;
 		gc.beginPath();
 		for(i=lastPoint;i<path.size();i++)  {
-			if(i == lastPoint)
-				gc.moveTo(path.get(i).x, path.get(i).y);
+			pt = toCanvas(path.get(i));
+			if(pt.x == -1)
+				continue;
+			else if(i == lastPoint)
+				gc.strokeRect(pt.x, pt.y, 4, 4);
+				//gc.moveTo(pt.x, pt.y);
 			else
-				gc.lineTo(path.get(i).x, path.get(i).y);
+				gc.strokeRect(pt.x, pt.y, 4, 4);
+				//gc.lineTo(pt.x, pt.y);
 		}
 		gc.stroke();
-		log.finer("Path updated.");
+		//log.info("Path updated.");
 	}
 	//Draws the map onto the page
 	public void drawMap() {
@@ -193,9 +235,16 @@ public class GUIController {
 			return;
 		}
 		float scl = getScale(im);
+		//System.out.println(baseXOffset + " - " + baseYOffset);
 		gc.drawImage(im, 0, 0, scl*im.getWidth(), scl*im.getHeight());
 		log.info("Map drawn");
-		getMapData(mapName);
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				mapTop.setText("Map top: " + datM.getFormatted4(topLng) + ", " + datM.getFormatted4(topLat));
+				mapBase.setText("Map base: " + datM.getFormatted4(baseLng) + ", " + datM.getFormatted4(baseLat));
+			}
+		}); 
 	}
 	@FXML
 	public void checkThread() {
@@ -224,8 +273,11 @@ public class GUIController {
 		float widFac = (float) (imWid / canWid);
 		float htFac = (float) (imHt / canHt);
 		log.finer("Returning scale");
-		if(widFac > htFac)
+		if(widFac > htFac) {
+			baseYOffset = (float)(canHt - imHt / widFac);
 			return  1 / widFac;
+		}
+		baseXOffset = (float)(canWid - imWid / htFac);
 		return 1 / htFac;
 	}
 	public void updateCons() {
@@ -309,9 +361,9 @@ public class GUIController {
 		JSONArray arr = obj.getJSONArray("data");
 		try {
 			baseLng = (double)((JSONObject)(arr.get(0))).get("long");
-			baseLng = (double)((JSONObject)(arr.get(0))).get("lat");
+			baseLat = (double)((JSONObject)(arr.get(0))).get("lat");
 			topLng = (double)((JSONObject)(arr.get(1))).get("long");
-			topLng = (double)((JSONObject)(arr.get(1))).get("lat");
+			topLat = (double)((JSONObject)(arr.get(1))).get("lat");
 		} catch(JSONException e)  {
 			log.severe("Error getting JSON map data.");
 			log.severe(e.toString());	
@@ -319,13 +371,30 @@ public class GUIController {
 		}
 		return true;
 	}
-	private tuple toCanvas(float lng, float lat) {
-		if(lng < baseLng || lng > topLng || lat < baseLat || lat > topLat)
-			return new tuple(-1, -1);
-		double xScale = (float) (Math.abs(topLng - baseLng) / mapCan.getWidth());
-		double yScale = (float) (Math.abs(topLat - baseLat) / mapCan.getHeight());
+	//NOTE: adjust lat conditions to work anywhere when time - lazy rn...
+	private tuple toCanvas(tuple src) {
+		double lng = src.x, lat = src.y;
+		double imWid = mapCan.getWidth() - baseXOffset, imHt = mapCan.getHeight() - baseYOffset;
+		boolean left = lng > baseLng, right = lng < topLng, bottom = lat < baseLat, top = lat > topLat;
 		
-		return new tuple(Math.abs(lng - baseLng)*xScale, Math.abs(lat - baseLat)*yScale);
+		if(mapWarn = (left || right|| top || bottom)) {
+			if(left) 		mapRel = 1;
+			else if(right) 	mapRel = 2;
+			else if(top) 	mapRel = 4;
+			else if(bottom) mapRel = 3;
+			
+			return new tuple(-1, -1);
+		}
+		mapRel = 5;
+		double xScale = imWid / Math.abs(Math.abs(topLng)-Math.abs(baseLng));
+		double yScale = imHt / Math.abs(Math.abs(topLat)-Math.abs(baseLat));
+		double x = Math.abs(Math.abs(lng) - Math.abs(baseLng))*xScale;
+		double y = Math.abs(Math.abs(lat) - Math.abs(baseLat))*yScale;
+		y = imHt - y;
+		
+		if(!Double.isFinite(x)) {x = 0; }
+		if(!Double.isFinite(y)) {y = 0; }
+		return new tuple(x-3, y-4);
 	}
 	public String getStyleStr(boolean tp) {
 		if(tp)
@@ -333,7 +402,7 @@ public class GUIController {
 		return "-fx-font-weight: normal;";
 	}
 	public String getStateStr(boolean tp) {
-		if(tp)
+		if(!tp)
 			return "Normal";
 		return "WARNING";
 	}
@@ -345,6 +414,7 @@ public class GUIController {
 				xbeeState.setText("Xbee State: " + getStateStr(xbeeWarn));
 				GPSState.setText("GPS State: " + getStateStr(GPSWarn));
 				battState.setText("Battery State: " + getStateStr(battWarn));
+				mapState.setText("Out of map: " + getStateStr(mapWarn));
 			}
 		});
 	}
@@ -352,6 +422,8 @@ public class GUIController {
 		if(!warnChange)
 			return;
 		warnChange = false;
+		if(xbeeWarn)
+			updateWarnText();
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
@@ -359,6 +431,7 @@ public class GUIController {
 				xbeeState.setStyle(getStyleStr(xbeeWarn));
 				GPSState.setStyle(getStyleStr(GPSWarn));
 				battState.setStyle(getStyleStr(battWarn));
+				mapState.setStyle(getStyleStr(mapWarn));
 			}
 		});	
 	}

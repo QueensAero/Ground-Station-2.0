@@ -46,6 +46,7 @@ public class SerialCommunicator {
     	public boolean running;
     	@Override
     	public void run() {
+    		long start = System.currentTimeMillis();
     		try {
     			datM.printPackTime();
     		} catch(Exception e) {

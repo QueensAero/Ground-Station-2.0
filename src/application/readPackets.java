@@ -23,6 +23,7 @@ public class readPackets implements Runnable {
 	static final char KILL_THREAD = 'K';
 	static final int PACKET_LENGTH = 38, BAD_COUNT = 50;
 	
+	//Initializes 
 	public readPackets(SynchronousQueue<Byte> buff, SerialCommunicator _comm) {
 		byteBuff = buff;
 		comm = _comm;
