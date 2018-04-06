@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="windows-1252" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2018-04-03T20:35:57</date>
+  <millis>1522802157931</millis>
+  <sequence>0</sequence>
+  <logger>application.SerialCommunicator</logger>
+  <level>SEVERE</level>
+  <class>application.SerialCommunicator</class>
+  <method>resuscitate</method>
+  <thread>13</thread>
+  <message>Timer was started!</message>
+</record>
+<record>
+  <date>2018-04-03T20:35:57</date>
+  <millis>1522802157942</millis>
+  <sequence>1</sequence>
+  <logger>application.SerialCommunicator</logger>
+  <level>SEVERE</level>
+  <class>application.SerialCommunicator</class>
+  <method>resuscitate</method>
+  <thread>13</thread>
+  <message>Thread was just resuscitated!</message>
+</record>
+<record>
+  <date>2018-04-03T20:35:57</date>
+  <millis>1522802157942</millis>
+  <sequence>2</sequence>
+  <logger>application.GUIController</logger>
+  <level>FINE</level>
+  <class>application.GUIController</class>
+  <method>initialize</method>
+  <thread>13</thread>
+  <message>Initializing.</message>
+</record>
+<record>
+  <date>2018-04-03T20:36:04</date>
+  <millis>1522802164917</millis>
+  <sequence>3</sequence>
+  <logger>application.SerialCommunicator</logger>
+  <level>SEVERE</level>
+  <class>application.SerialCommunicator</class>
+  <method>sendByte</method>
+  <thread>13</thread>
+  <message>Failed to send 111, no connection.</message>
+</record>
+<record>
+  <date>2018-04-03T20:36:06</date>
+  <millis>1522802166986</millis>
+  <sequence>4</sequence>
+  <logger>application.SerialCommunicator</logger>
+  <level>SEVERE</level>
+  <class>application.SerialCommunicator</class>
+  <method>sendByte</method>
+  <thread>13</thread>
+  <message>Failed to send 108, no connection.</message>
+</record>
+<record>
+  <date>2018-04-03T20:36:12</date>
+  <millis>1522802172721</millis>
+  <sequence>5</sequence>
+  <logger>application.SerialCommunicator</logger>
+  <level>SEVERE</level>
+  <class>application.SerialCommunicator</class>
+  <method>sendByte</method>
+  <thread>13</thread>
+  <message>Failed to send 117, no connection.</message>
+</record>
+<record>
+  <date>2018-04-03T20:36:12</date>
+  <millis>1522802172722</millis>
+  <sequence>6</sequence>
+  <logger>application.GUIController</logger>
+  <level>FINE</level>
+  <class>application.GUIController$1</class>
+  <method>handle</method>
+  <thread>13</thread>
+  <message>Camera going up
+</message>
+</record>
+<record>
+  <date>2018-04-03T20:36:20</date>
+  <millis>1522802180797</millis>
+  <sequence>7</sequence>
+  <logger>application.SerialCommunicator</logger>
+  <level>SEVERE</level>
+  <class>application.SerialCommunicator</class>
+  <method>sendByte</method>
+  <thread>13</thread>
+  <message>Failed to send 117, no connection.</message>
+</record>
+<record>
+  <date>2018-04-03T20:36:25</date>
+  <millis>1522802185163</millis>
+  <sequence>8</sequence>
+  <logger>application.SerialCommunicator</logger>
+  <level>SEVERE</level>
+  <class>application.SerialCommunicator</class>
+  <method>sendByte</method>
+  <thread>13</thread>
+  <message>Failed to send 117, no connection.</message>
+</record>

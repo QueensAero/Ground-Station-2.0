@@ -41,6 +41,8 @@ public class KMLStore {
 	}
 	private ArrayList<Placemark> coords;
 	public KMLStore() {
+		log.addHandler(GUIController.taHandle);
+		log.addHandler(GUIController.filehandle);
 		coords = new ArrayList<Placemark>();
 		log.log(Level.FINER, "KML storing object initialized.");
 	}
@@ -66,7 +68,7 @@ public class KMLStore {
 			Element root = KMLOut.createElement("Folder");
 			preRoot.appendChild(root);
 			log.log(Level.FINER, "Document created.");
-			
+
 			/*
 			 * KML -> preRoot
 			 * 	Folder -> root
@@ -91,16 +93,16 @@ public class KMLStore {
 				String cordStr = Float.toString(cord.getLat()) + "," + Float.toString(cord.getLng()) + ",0";
 				coordinates.appendChild(KMLOut.createTextNode(cordStr));
 				pt.appendChild(coordinates);
-				log.log(Level.FINEST, "Coordinate added."); 
+				log.log(Level.FINEST, "Coordinate added.");
 			}
-			
+
 			TransformerFactory factory = TransformerFactory.newInstance();
 			Transformer trans = factory.newTransformer();
 			DOMSource source = new DOMSource(KMLOut);
 			StreamResult output = new StreamResult(new File("KMLOut.kml"));
 			trans.transform(source, output);
 			log.log(Level.INFO, "Document exported successfully.");
-			
+
 		} catch (ParserConfigurationException e) {
 			log.log(Level.SEVERE, "Parser error.");
 			log.log(Level.SEVERE, e.toString());

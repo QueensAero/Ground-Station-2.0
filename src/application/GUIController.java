@@ -7,9 +7,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import java.util.logging.StreamHandler;
@@ -55,12 +58,12 @@ public class GUIController {
 	Label vHDOP, packTime, speed, bytesAvail, satNum, heightL, pointsTaken, mapTop, mapBase;
 	@FXML
 	Label orginDist, travDist, batLevel, hdop, connState, packetsR, packRateLabel, fixTp;
-	
+
 	//Warnings
 	@FXML
 	Label xbeeState, GPSState, battState, serialState, mapState, onMapStatus;
 	private boolean xbeeWarn, GPSWarn, battWarn, serialWarn, warnChange, mapWarn;
-	
+
 	public void setXW(boolean st) {xbeeWarn = st; warnC(); }
 	public void setGW(boolean st) {GPSWarn = st; warnC(); }
 	public void setBW(boolean st) {battWarn = st; warnC(); }
@@ -70,42 +73,44 @@ public class GUIController {
 	public boolean getBW() {return battWarn; }
 	public boolean getSW() {return serialWarn; }
 	private void warnC() {warnChange = true; }
-	
+
 	//Map variables
 	//public Canvas mapCan;
-	private ArrayList<tuple> path; 
+	private ArrayList<tuple> path;
 	private GraphicsContext gc;
 	protected int lastPoint = -1, mapRel = 0, pt = -1;
 	private String mapName;
 	private double baseLng, baseLat, topLng, topLat;
 	private float baseXOffset = 0, baseYOffset = 0;
-	
+
 	//Communication
 	SerialCommunicator comm;
 	dataManager datM;
 	OutputStream infOut;
 	private static final Logger log = Logger.getLogger(GUIController.class.getName());
-	FileHandler filehandle = null;
-	
+	protected static FileHandler filehandle = null;
+	protected static TextAreaHandler taHandle = new TextAreaHandler();
+
 	@FXML
 	public void initialize() {
+		log.setLevel(Level.ALL);
+		taHandle.setTextArea(infoPane);
+		try {
+			SimpleDateFormat date = new SimpleDateFormat("HH.mm.ss");
+			filehandle = new FileHandler("output-"+date.format(Calendar.getInstance().getTime())+".log");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		datM = new dataManager(this);	//Works with bytes from comm
 		comm = new SerialCommunicator(this, datM);	//Raw communication with Xbee
 		path = datM.getPath();
 		connButtSt(false);
-		FileHandler filehandle = null;
-		try {
-			filehandle = new FileHandler("output.log");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		TextAreaHandler taHandle = new TextAreaHandler();
-		taHandle.setTextArea(infoPane);
+
 		log.addHandler(taHandle);
-		log.addHandler(filehandle); 
+		log.addHandler(filehandle);
 		log.fine("Initializing.");
 		xbeeWarn = GPSWarn = battWarn = serialWarn = mapWarn = true;
-		
+
 		cameraControl.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
@@ -130,7 +135,7 @@ public class GUIController {
 			}
 		});
 	}
-	
+
 	//Initializes the canvas
 	public void initCanvas() {
 		if(mapCan != null)
@@ -179,20 +184,20 @@ public class GUIController {
 		arr.add(new tuple(baseLng, topLat));
 		arr.add(new tuple(topLng, topLat));
 		arr.add(new tuple(topLng, baseLat));
-		
+
 		//ILC and Union-University
 		arr.add(new tuple(-76.492984, 44.227752));
 		arr.add(new tuple(-76.495606, 44.227921));
-		
-		for(int i=0;i<10;i++) 
+
+		for(int i=0;i<10;i++)
 			arr.add(new tuple(-76.495618 + 0.000100*i, 44.227920));
-		
+
 		if(pt >= arr.size()) {return; }
 		gc.setStroke(Color.RED);
 		gc.setLineWidth(5);
 		tuple point = toCanvas(arr.get(++pt));
 		gc.strokeRect(point.x, point.y, 10, 10);
-		
+
 		log.info("Point drawn.");
 	}
 	//Updates the path (as not to redraw all previous points
@@ -244,7 +249,7 @@ public class GUIController {
 				mapTop.setText("Map top: " + datM.getFormatted4(topLng) + ", " + datM.getFormatted4(topLat));
 				mapBase.setText("Map base: " + datM.getFormatted4(baseLng) + ", " + datM.getFormatted4(baseLat));
 			}
-		}); 
+		});
 	}
 	@FXML
 	public void checkThread() {
@@ -263,6 +268,7 @@ public class GUIController {
 			return;
 		}
 		log.info("Interface closed.");
+
 		((Stage)(closeButt.getScene().getWindow())).close();
 	}
 	private float getScale(Image im) {
@@ -308,14 +314,14 @@ public class GUIController {
 		MenuItem tmpItem;
 		mapList.getItems().clear();
 		for(File fl : fold.listFiles()) {
-			if((tmp = fl.getName()).length() > 3 
-					&& tmp.substring(tmp.length()-3).equals("jpg") 
+			if((tmp = fl.getName()).length() > 3
+					&& tmp.substring(tmp.length()-3).equals("jpg")
 					&& data.contains(tmp.substring(0, tmp.length()-4))) {
 				tmpItem = new MenuItem(tmp.substring(0, tmp.length()-4));
 				mapList.getItems().add(tmpItem);
-				
+
 				tmpItem.setOnAction(new EventHandler<ActionEvent>() {
-					@Override 
+					@Override
 					public void handle(ActionEvent e) {
 						mapName = ((MenuItem)e.getSource()).getText();
 						drawMap();
@@ -366,7 +372,7 @@ public class GUIController {
 			topLat = (double)((JSONObject)(arr.get(1))).get("lat");
 		} catch(JSONException e)  {
 			log.severe("Error getting JSON map data.");
-			log.severe(e.toString());	
+			log.severe(e.toString());
 			return false;
 		}
 		return true;
@@ -376,13 +382,13 @@ public class GUIController {
 		double lng = src.x, lat = src.y;
 		double imWid = mapCan.getWidth() - baseXOffset, imHt = mapCan.getHeight() - baseYOffset;
 		boolean left = lng > baseLng, right = lng < topLng, bottom = lat < baseLat, top = lat > topLat;
-		
+
 		if(mapWarn = (left || right|| top || bottom)) {
 			if(left) 		mapRel = 1;
 			else if(right) 	mapRel = 2;
 			else if(top) 	mapRel = 4;
 			else if(bottom) mapRel = 3;
-			
+
 			return new tuple(-1, -1);
 		}
 		mapRel = 5;
@@ -391,7 +397,7 @@ public class GUIController {
 		double x = Math.abs(Math.abs(lng) - Math.abs(baseLng))*xScale;
 		double y = Math.abs(Math.abs(lat) - Math.abs(baseLat))*yScale;
 		y = imHt - y;
-		
+
 		if(!Double.isFinite(x)) {x = 0; }
 		if(!Double.isFinite(y)) {y = 0; }
 		return new tuple(x-3, y-4);
@@ -433,13 +439,15 @@ public class GUIController {
 				battState.setStyle(getStyleStr(battWarn));
 				mapState.setStyle(getStyleStr(mapWarn));
 			}
-		});	
+		});
 	}
 	public void getConInfo()  {comm.getConnInfo(); }
-	public void openBay() {datM.openBay();	}
+	public void openBay() {datM.openBay(); }
 	public void closeBay() {datM.closeBay(); }
 	public void camLeft(){comm.sendByte((byte)'l'); }
 	public void camUp(){comm.sendByte((byte)'u'); }
 	public void camRight(){comm.sendByte((byte)'r'); }
 	public void camDown(){comm.sendByte((byte)'d'); }
+	public void clearTextArea(){infoPane.clear();}
+	public void setTALevel(String level){taHandle.setLevel(Level.parse(level));}
 }

@@ -36,12 +36,12 @@ public class SerialCommunicator {
 	protected long packsIn, packetTime;
 	protected float packRate;
 	private static boolean hold;
-	
+
 	//Connection constants
 	private static final int BAUD_RATE = 115200;
 	private static final String COMMAND_MODE_CMD = "+++", SWITCH_TO_AT_CMD = "ATAP0\r", EXIT_COMMAND_MODE_CMD = "ATCN\r", COMMAND_MODE_OK = "OK\r";
     private static final int INTO_CMD_MODE_TIMEOUT = 3000, RESPONSE_TIMEOUT = 750;
-	
+
     class ThreadCheck extends TimerTask  {
     	public boolean running;
     	@Override
@@ -62,9 +62,11 @@ public class SerialCommunicator {
     		contrl.updateWarnStyle();
     	}
     }
-    
+
 	//Constructor
 	public SerialCommunicator(GUIController cont, dataManager _datM) {
+		log.addHandler(GUIController.taHandle);
+		log.addHandler(GUIController.filehandle);
 		hold = false;
 		datM = _datM;
 		contrl = cont;
@@ -93,7 +95,7 @@ public class SerialCommunicator {
 			timer.schedule(new ThreadCheck(), 0, 100);
 			log.severe("Timer was started!");
 		}
-		
+
 		if(read || !readThread.isAlive()) {
 			reader = new readPackets(byteBuff, this);
 			readThread = reader.start();
@@ -104,7 +106,7 @@ public class SerialCommunicator {
 	}
     protected void updatePackTime() {
     	packRate = (float)1000/getPackTime();
-    	packetTime = System.currentTimeMillis(); 
+    	packetTime = System.currentTimeMillis();
     	packsIn++;
 	}
     protected long getPackTime() {return System.currentTimeMillis() - packetTime; }
@@ -113,7 +115,7 @@ public class SerialCommunicator {
 	protected InputStream getInputStream() {return in; }
 	public boolean getPortStatus() {
 		if(currPort != null)
-			return currPort.isOpen(); 
+			return currPort.isOpen();
 		return false;
 	}
 	public void updateCommList() {commList = new ArrayList<SerialPort>(Arrays.asList(SerialPort.getCommPorts())); }
@@ -138,7 +140,7 @@ public class SerialCommunicator {
 		if(!currPort.openPort()) {
 			log.severe("Failed to open connection");
 			return false;
-		} 
+		}
 		log.info("Connection established.");
 		currPort.setBaudRate(BAUD_RATE);
 		out = currPort.getOutputStream();
@@ -147,7 +149,7 @@ public class SerialCommunicator {
 		flushInput(Integer.MAX_VALUE);
 		initXbee();
 		connected = true;
-		
+
 		return true;
 	}
 	public boolean closeConnection() {
@@ -203,7 +205,7 @@ public class SerialCommunicator {
 			log.severe("Failed to send " + b + ", no connection.");
 			return;
 		}
-		currPort.writeBytes(b, b.length); 
+		currPort.writeBytes(b, b.length);
 		log.finest(b + " sent");
 	}
 	public void initReadList() {
