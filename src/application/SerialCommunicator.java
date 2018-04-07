@@ -13,11 +13,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.SynchronousQueue;
 import java.util.logging.Logger;
 import com.fazecast.jSerialComm.SerialPort;
-import com.fazecast.jSerialComm.SerialPortDataListener;
-import com.fazecast.jSerialComm.SerialPortEvent;
 
 public class SerialCommunicator {
 	private ArrayList<SerialPort> commList;
@@ -29,7 +26,6 @@ public class SerialCommunicator {
 	private GUIController contrl;
 	protected dataManager datM;
 	protected String portName;
-	protected SynchronousQueue<Byte> byteBuff;
 	private static Thread readThread;
 	private readPackets reader;
 	private Timer timer;
@@ -46,7 +42,6 @@ public class SerialCommunicator {
     	public boolean running;
     	@Override
     	public void run() {
-    		long start = System.currentTimeMillis();
     		try {
     			datM.printPackTime();
     		} catch(Exception e) {
@@ -70,7 +65,6 @@ public class SerialCommunicator {
 		contrl = cont;
 		datM.passComm(this);
 		connected = false;
-		byteBuff = new SynchronousQueue<Byte>();
 		resuscitate();
 		packsIn = -1;
 		updatePackTime();
@@ -95,7 +89,7 @@ public class SerialCommunicator {
 		}
 		
 		if(read || !readThread.isAlive()) {
-			reader = new readPackets(byteBuff, this);
+			reader = new readPackets(this);
 			readThread = reader.start();
 			if(read)
 				log.severe("Thread was just resuscitated!");
@@ -206,40 +200,6 @@ public class SerialCommunicator {
 		currPort.writeBytes(b, b.length); 
 		log.finest(b + " sent");
 	}
-	public void initReadList() {
-		currPort.addDataListener(new SerialPortDataListener() {
-			@Override
-			public int getListeningEvents() {
-				return SerialPort.LISTENING_EVENT_DATA_AVAILABLE;
-			}
-			@Override
-			public void serialEvent(SerialPortEvent e) {
-				if(e.getEventType() != SerialPort.LISTENING_EVENT_DATA_AVAILABLE)
-					return;
-				byte[] tmpBuff = new byte[currPort.bytesAvailable()];
-				int numRead = currPort.readBytes(tmpBuff, tmpBuff.length);
-				//datM.distribute(tmpBuff);
-				toBuffer(tmpBuff);
-				System.out.println(Integer.toString(numRead) + " bytes read.");
-			}
-		});
-		log.info("Added listener.");
-	}
-	private void toBuffer(byte[] tmp) {
-		int fail = -1;
-		for(int i=0;i<tmp.length;i++) {
-			try {
-				byteBuff.put(tmp[i]);
-			} catch(InterruptedException e) {
-				if(fail == i) {
-					log.severe("Failed to write " + tmp[i] + " to sync-buffer.");
-					continue;
-				}
-				i--;
-				fail = i;
-			}
-		}
-	}
 	public boolean writeAndWait(String cmd, int time) {
 		int tries = 3;
 		try {
@@ -281,8 +241,5 @@ public class SerialCommunicator {
 		log.finer("Xbee successfully out of command mode.");
 		log.info("Xbee successfully initialized.");
 		return true;
-	}
-	public void markPack()  {
-		System.out.println("New packet received.");
 	}
 }

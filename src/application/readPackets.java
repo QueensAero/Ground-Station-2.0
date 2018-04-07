@@ -2,12 +2,10 @@ package application;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.concurrent.SynchronousQueue;
 import java.util.logging.Logger;
 
 public class readPackets implements Runnable {
 	private static final Logger log = Logger.getLogger(readPackets.class.getName());
-	private SynchronousQueue<Byte> byteBuff;
 	private SerialCommunicator comm;
 	private boolean inPack;
 	private byte[] datPack;
@@ -24,8 +22,7 @@ public class readPackets implements Runnable {
 	static final int PACKET_LENGTH = 38, BAD_COUNT = 50;
 	
 	//Initializes 
-	public readPackets(SynchronousQueue<Byte> buff, SerialCommunicator _comm) {
-		byteBuff = buff;
+	public readPackets(SerialCommunicator _comm) {
 		comm = _comm;
 		reset();
 		datPack = new byte[PACKET_LENGTH];
@@ -33,7 +30,6 @@ public class readPackets implements Runnable {
 	}
 	private void clear() {
 		log.severe("Clearing");
-		byteBuff.clear();
 		comm.flushInput();
 		reset();
 	}
@@ -73,7 +69,7 @@ public class readPackets implements Runnable {
 				in = comm.getInputStream();
 			
 			try {if(in.available()  <= 0) {continue; }} catch(IOException e) {} //Don't proceed if there are not bytes availible to read.
-			
+			log.warning("something");
 			//Collection
 			if(badData < 50 && !badRun)
 				badData = 5;

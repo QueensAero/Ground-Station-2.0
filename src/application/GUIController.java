@@ -13,7 +13,6 @@ import java.util.logging.Handler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import java.util.logging.StreamHandler;
-
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -216,7 +215,7 @@ public class GUIController {
 				//gc.lineTo(pt.x, pt.y);
 		}
 		gc.stroke();
-		//log.info("Path updated.");
+		log.finer("Path updated.");
 	}
 	//Draws the map onto the page
 	public void drawMap() {

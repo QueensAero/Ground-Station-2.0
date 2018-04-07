@@ -1,9 +1,6 @@
 Things to do 
 
 Critical:
--Find and implement best way to save associated map coordinates - object search (Michael)
--Find proper drivers for RCA to USB dongle
--Get video stream to display in GUI
 -Determine what information we need regularily from arduino and change packet
 
 Important:
@@ -11,15 +8,12 @@ Important:
 -Get Xbee to give connection strength and state
 -Get Logger to output to TextArea 
 -Calculate voltage vs. batt % curve and give + battery warning
-
+-Comment code
 
 
 Nice to have:
--Actually be able to choose map
-	-Find a way to store and save related map data (i.e. corner GPS coordinates)
-	-Re-write map drawing to choose file based on selection
-
-
+-Re-write map drawing to choose file based on selection
 
 When possible:
 -Make tutorial/overview document for git
+-Make Java tutorial
