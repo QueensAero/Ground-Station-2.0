@@ -1,15 +1,10 @@
 package com.QRGX;
 	
-import java.io.IOException;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
-import sun.reflect.Reflection;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
-
 
 public class MainLaunch extends Application {
 	@Override

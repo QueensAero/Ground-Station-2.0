@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="windows-1252" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2018-04-09T19:50:22</date>
+  <millis>1523317822793</millis>
+  <sequence>2</sequence>
+  <logger>com.QRGX.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QRGX.GUIController</class>
+  <method>initCanvas</method>
+  <thread>13</thread>
+  <message>Canvas initialized.</message>
+</record>
+<record>
+  <date>2018-04-09T19:50:22</date>
+  <millis>1523317822885</millis>
+  <sequence>3</sequence>
+  <logger>com.QRGX.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QRGX.GUIController</class>
+  <method>drawMap</method>
+  <thread>13</thread>
+  <message>Map drawn</message>
+</record>
+<record>
+  <date>2018-04-09T19:50:24</date>
+  <millis>1523317824803</millis>
+  <sequence>4</sequence>
+  <logger>com.QRGX.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QRGX.GUIController</class>
+  <method>initVideoCan</method>
+  <thread>13</thread>
+  <message>Canvas initialized.</message>
+</record>
+<record>
+  <date>2018-04-09T19:50:24</date>
+  <millis>1523317824906</millis>
+  <sequence>5</sequence>
+  <logger>com.QRGX.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QRGX.GUIController</class>
+  <method>runVideo</method>
+  <thread>13</thread>
+  <message>Video stream opened.</message>
+</record>
+<record>
+  <date>2018-04-09T19:50:34</date>
+  <millis>1523317834090</millis>
+  <sequence>8</sequence>
+  <logger>com.QRGX.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QRGX.GUIController</class>
+  <method>testDraw</method>
+  <thread>13</thread>
+  <message>Point drawn.</message>
+</record>
+<record>
+  <date>2018-04-09T19:50:36</date>
+  <millis>1523317836362</millis>
+  <sequence>9</sequence>
+  <logger>com.QRGX.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QRGX.GUIController</class>
+  <method>testDraw</method>
+  <thread>13</thread>
+  <message>Point drawn.</message>
+</record>
+<record>
+  <date>2018-04-09T19:50:38</date>
+  <millis>1523317838662</millis>
+  <sequence>10</sequence>
+  <logger>com.QRGX.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QRGX.GUIController</class>
+  <method>testDraw</method>
+  <thread>13</thread>
+  <message>Point drawn.</message>
+</record>
+<record>
+  <date>2018-04-09T19:50:39</date>
+  <millis>1523317839334</millis>
+  <sequence>11</sequence>
+  <logger>com.QRGX.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QRGX.GUIController</class>
+  <method>testDraw</method>
+  <thread>13</thread>
+  <message>Point drawn.</message>
+</record>
+<record>
+  <date>2018-04-09T19:50:40</date>
+  <millis>1523317840063</millis>
+  <sequence>12</sequence>
+  <logger>com.QRGX.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QRGX.GUIController</class>
+  <method>testDraw</method>
+  <thread>13</thread>
+  <message>Point drawn.</message>
+</record>
+<record>
+  <date>2018-04-09T19:50:40</date>
+  <millis>1523317840609</millis>
+  <sequence>13</sequence>
+  <logger>com.QRGX.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QRGX.GUIController</class>
+  <method>testDraw</method>
+  <thread>13</thread>
+  <message>Point drawn.</message>
+</record>
+<record>
+  <date>2018-04-09T19:50:45</date>
+  <millis>1523317845264</millis>
+  <sequence>15</sequence>
+  <logger>com.QRGX.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QRGX.GUIController</class>
+  <method>killTimer</method>
+  <thread>13</thread>
+  <message>Video stream closed.</message>
+</record>
+<record>
+  <date>2018-04-09T19:50:45</date>
+  <millis>1523317845265</millis>
+  <sequence>16</sequence>
+  <logger>com.QRGX.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QRGX.GUIController</class>
+  <method>close</method>
+  <thread>13</thread>
+  <message>Interface closed.</message>
+</record>
+</log>

@@ -1,6 +1,5 @@
 package com.QRGX;
 
-import java.io.OutputStream;
 import java.util.logging.LogRecord;
 import java.util.logging.StreamHandler;
 

@@ -3,27 +3,21 @@ package com.QRGX;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -36,24 +30,15 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import org.bytedeco.javacv.CanvasFrame;
-import org.bytedeco.javacv.Frame;
-import org.bytedeco.javacv.FrameGrabber.Exception;
-import org.bytedeco.javacv.Java2DFrameConverter;
-import org.bytedeco.javacv.OpenCVFrameGrabber;
 import org.json.*;
 import org.opencv.core.Mat;
-import org.opencv.core.MatOfByte;
-import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.videoio.VideoCapture;
 import org.opencv.core.Core;
-
 
 public class GUIController {
 	static{ System.loadLibrary(Core.NATIVE_LIBRARY_NAME); }
@@ -105,10 +90,8 @@ public class GUIController {
 	private Canvas vidCan;
 	private GraphicsContext gv;
 	private ImageView imV;
-	private VideoCapture vc = new VideoCapture();
-	private boolean videoActive = false, videoCanActive = false;
-	private Java2DFrameConverter conv = new Java2DFrameConverter();
-	int imgCount = 0;
+	private VideoCapture vc;
+	private boolean videoActive = false;
 	Timer videoTimer;
 	
 	//Communication
@@ -125,10 +108,12 @@ public class GUIController {
 		datM = new dataManager(this);	//Works with bytes from comm
 		comm = new SerialCommunicator(this, datM);	//Raw communication with Xbee
 		path = datM.getPath();
+		vc = new VideoCapture();
 		connButtSt(false);
 		FileHandler filehandle = null;
 		try {
-			filehandle = new FileHandler("output.log");
+			String fileName = new SimpleDateFormat("'log_'yyyy'_'MM'_'dd'_'HH'_'mm'.txt'").format(new Date());
+			filehandle = new FileHandler(fileName);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -458,8 +443,7 @@ public class GUIController {
 		return data;
 	}
 	public boolean getMapData(String fileName) {
-		JSONObject obj = null, tmp;
-		tuple[] tp = new tuple[2];
+		JSONObject obj = null;
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(new File(fileName + ".json")));
 			String st = br.readLine();
