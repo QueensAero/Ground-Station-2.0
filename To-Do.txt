@@ -2,14 +2,13 @@ Things to do
 
 Critical:
 -Determine what information we need regularily from arduino and change packet
+-Output logged points to file on close
 
 Important:
--Get Logger to flush to file
 -Get Xbee to give connection strength and state
--Get Logger to output to TextArea 
 -Calculate voltage vs. batt % curve and give + battery warning
 -Comment code
-
+-Clean up drawing method for points on map
 
 Nice to have:
 -Re-write map drawing to choose file based on selection

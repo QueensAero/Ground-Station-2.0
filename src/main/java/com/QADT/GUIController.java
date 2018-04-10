@@ -1,4 +1,4 @@
-package com.QRGX;
+package com.QADT;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
@@ -68,6 +68,7 @@ public class GUIController {
 	Label xbeeState, GPSState, battState, serialState, mapState, onMapStatus;
 	private boolean xbeeWarn, GPSWarn, battWarn, serialWarn, warnChange, mapWarn;
 	
+	//Warning methods
 	public void setXW(boolean st) {xbeeWarn = st; warnC(); }
 	public void setGW(boolean st) {GPSWarn = st; warnC(); }
 	public void setBW(boolean st) {battWarn = st; warnC(); }
@@ -110,6 +111,8 @@ public class GUIController {
 		path = datM.getPath();
 		vc = new VideoCapture();
 		connButtSt(false);
+		
+		//Setup logger
 		FileHandler filehandle = null;
 		try {
 			String fileName = new SimpleDateFormat("'log_'yyyy'_'MM'_'dd'_'HH'_'mm'.txt'").format(new Date());
@@ -120,10 +123,12 @@ public class GUIController {
 		TextAreaHandler taHandle = new TextAreaHandler();
 		taHandle.setTextArea(infoPane);
 		log.addHandler(taHandle);
-		log.addHandler(filehandle); 
-		log.fine("Initializing.");
+		log.addHandler(filehandle);
+		
+		log.fine("GUIController Initializing.");
 		xbeeWarn = GPSWarn = battWarn = serialWarn = mapWarn = true;
 		
+		//Adding listeners for camera movement with arrow keys
 		cameraControl.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
@@ -183,7 +188,7 @@ public class GUIController {
 				gc.lineTo(pt.x, pt.y);
 				*/
 			else
-				gc.strokeRect(pt.x, pt.y, 4, 4);
+				gc.strokeRect(pt.x, pt.y, 2, 2);
 		}
 		lastPoint = path.size() - 1;
 		gc.stroke();

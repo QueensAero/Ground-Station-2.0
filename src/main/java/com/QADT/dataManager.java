@@ -1,4 +1,4 @@
-package com.QRGX;
+package com.QADT;
 
 import java.nio.ByteBuffer;
 import java.text.DecimalFormat;

@@ -1,4 +1,4 @@
-package com.QRGX;
+package com.QADT;
 
 /** Notes on Class:
  * Based on the code from the old Java Swing version of the ground station

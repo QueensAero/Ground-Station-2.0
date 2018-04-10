@@ -1,4 +1,4 @@
-package com.QRGX;
+package com.QADT;
 
 import java.util.logging.LogRecord;
 import java.util.logging.StreamHandler;

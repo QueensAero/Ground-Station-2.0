@@ -1,4 +1,4 @@
-package com.QRGX;
+package com.QADT;
 
 import java.io.IOException;
 import java.io.InputStream;

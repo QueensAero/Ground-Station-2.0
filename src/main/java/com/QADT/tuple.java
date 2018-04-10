@@ -1,4 +1,4 @@
-package com.QRGX;
+package com.QADT;
 
 //This is a basic class that stores a tuple (x, y) point
 

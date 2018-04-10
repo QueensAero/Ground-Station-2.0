@@ -1,4 +1,4 @@
-package com.QRGX;
+package com.QADT;
 	
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
