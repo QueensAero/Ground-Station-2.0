@@ -1,8 +1,8 @@
 Things to do 
 
 Critical:
--Determine what information we need regularily from arduino and change packet
--Output logged points to file on close
+-Determine what information we need regularly from arduino and change packet
+-Comment code/make a tutorial so people can actually install and run the repo
 
 Important:
 -Get Xbee to give connection strength and state
@@ -10,8 +10,11 @@ Important:
 -Comment code
 -Clean up drawing method for points on map
 
+
 Nice to have:
 -Re-write map drawing to choose file based on selection
+-Make sure file outputs don't overwrite
+-Make folders for data and log outputs
 
 When possible:
 -Make tutorial/overview document for git

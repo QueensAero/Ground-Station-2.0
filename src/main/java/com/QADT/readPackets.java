@@ -19,7 +19,7 @@ public class readPackets implements Runnable {
 	static final char AUTO_ON_CONF = 'b', AUTO_OFF_CONF = 'd';
 	static final char PACKET_START = '*', PACKET_END = 'e';
 	static final char KILL_THREAD = 'K';
-	static final int PACKET_LENGTH = 38, BAD_COUNT = 50;
+	protected static final int PACKET_LENGTH = 42, BAD_COUNT = 50;
 
 	//Initializes
 	public readPackets(SerialCommunicator _comm) {
@@ -71,7 +71,7 @@ public class readPackets implements Runnable {
 				in = comm.getInputStream();
 
 			try {if(in.available()  <= 0) {continue; }} catch(IOException e) {} //Don't proceed if there are not bytes availible to read.
-			log.warning("something");
+			
 			//Collection
 			if(badData < 50 && !badRun)
 				badData = 5;

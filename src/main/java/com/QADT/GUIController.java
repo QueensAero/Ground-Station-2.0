@@ -65,7 +65,7 @@ public class GUIController {
 	@FXML
 	Label vHDOP, packTime, speed, bytesAvail, satNum, heightL, pointsTaken, mapTop, mapBase;
 	@FXML
-	Label orginDist, travDist, batLevel, hdop, connState, packetsR, packRateLabel, fixTp;
+	Label orginDist, travDist, batLevel, hdop, connState, packetsR, packRateLabel, fixTp, headingLabel;
 
 	//Warnings
 	@FXML
@@ -277,7 +277,12 @@ public class GUIController {
 
 		return img;
 	}
-
+	@FXML
+	public void exportTest() {
+		path.add(new tuple(123, 456, 789, 012, 345));
+		path.add(new tuple(123, -456, 789, 012, 345));
+		path.add(new tuple(123, 456, -789, 012, 345));
+	}
 	public void testDraw() {
 		ArrayList<tuple> arr = new ArrayList<>();
 		arr.add(new tuple(baseLng, baseLat));
@@ -368,6 +373,7 @@ public class GUIController {
 			log.severe("Failed to close connection");
 			return;
 		}
+		datM.exportData();
 		log.info("Interface closed.");
 		((Stage)(closeButt.getScene().getWindow())).close();
 	}

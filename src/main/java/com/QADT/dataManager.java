@@ -1,15 +1,23 @@
 package com.QADT;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Logger;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import javafx.application.Platform;
 
 public class dataManager {
 	private float distToOrg, distTrav;
 	private ArrayList<tuple> path;
-	private float altAlt, altGPS, speed, HDOP, sValid, battState;
+	private float altAlt, altGPS, speed, HDOP, sValid, battState, heading;
 	private int satelites, btsAv;
 	private String fixType;
 	private GUIController cont;
@@ -99,6 +107,7 @@ public class dataManager {
 				cont.vHDOP.setText("Time since valid HDOP: " + sValid + "s");
 				cont.fixTp.setText("Fix Type: " + fixType);
 				cont.pointsTaken.setText("Points taken: " + path.size());
+				cont.headingLabel.setText("Heading: " + heading);
 				cont.onMapStatus.setText("Currently: " + ON_MAP[cont.mapRel]);
 				if(comm != null && comm.getState())
 					cont.connState.setText("Connection state: Connected to " + comm.portName);
@@ -109,12 +118,12 @@ public class dataManager {
 	}
 	public void openBay() {comm.sendByte((byte)DROP_OPEN); }
 	public void closeBay() {comm.sendByte((byte)DROP_CLOSE); }
-	public void newPoint(float latt, float lon){
+	public void newPoint(float latt, float lon, float h1, float h2, float heading){
+		tuple newLoc = new tuple(latt,lon, h1, h2, heading);
 		if(path.size() < 1) {
-			path.add(new tuple(latt,lon));
+			path.add(newLoc);
 			return;
 		}
-		tuple newLoc = new tuple(latt,lon);
 		float distFromLast = getDistance(path.get(path.size()-1),newLoc);
 		//check if new location more than 200m away from last point, if so don't add point
 		if(distFromLast<=100 || true) {
@@ -166,16 +175,42 @@ public class dataManager {
 				altGPS = ByteBuffer.wrap(tmp).getFloat();
 			else if(i == 30)
 				battState = ByteBuffer.wrap(tmp).getFloat();
+			else if(i == 34)
+				heading = ByteBuffer.wrap(tmp).getFloat();
 		}
-		if(pack[34] != 0 && HDOP < 3)
-			newPoint(lat, lng);
+		if(pack[38] != 0 && HDOP < 3)
+			newPoint(lat, lng, altAlt, altGPS, heading);
 
 		btsAv = _btsAv;
 		try {
-			fixType = FIX_TYPE[pack[34]];
-			satelites = pack[35];
+			fixType = FIX_TYPE[pack[38]];
+			satelites = pack[39];
 		} catch(ArrayIndexOutOfBoundsException e) {log.severe("You fucked up... fix type doesn't exist"); }
 		update();
 	}
 	public float getHeight() {return (altAlt + altGPS) / 2; }
+	public double getAvg(double a, double b) {return (a + b) / 2; }
+	public void exportData() {
+		if(path.isEmpty()) return;
+		
+		JSONObject out = new JSONObject();
+		JSONArray data = new JSONArray();
+		for(tuple pt : path) {
+			JSONObject tmp = new JSONObject();
+			tmp.put("long", pt.x);
+			tmp.put("lat", pt.y);
+			tmp.put("height", getAvg(pt.h1, pt.h2));
+			tmp.put("bearing", pt.head);
+			data.put(tmp);
+		}
+		out.put("data", data);
+		String fileName = new SimpleDateFormat("'data_'yyyy'_'MM'_'dd'_'HH'_'mm'.json'").format(new Date());
+		try(FileWriter file = new FileWriter(fileName)) {
+			file.write(out.toString());
+			file.flush();
+		} catch(IOException e) {
+			log.severe("Failed to export data to file!");
+			e.printStackTrace();
+		}
+	}
 }
