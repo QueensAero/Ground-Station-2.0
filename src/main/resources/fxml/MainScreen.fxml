@@ -59,7 +59,7 @@
             <Button fx:id="closeButt" mnemonicParsing="false" onAction="#close" text="Close" />
             <Button fx:id="openButt" mnemonicParsing="false" onAction="#openBay" text="Open bay" />
             <Button fx:id="closeButt" mnemonicParsing="false" onAction="#closeBay" text="Close bay" />
-            <Button mnemonicParsing="false" onAction="#testDraw" text="test" />
+            <Button mnemonicParsing="false" onAction="#exportTest" text="test" />
          </children>
          <padding>
             <Insets left="4.0" />
@@ -160,6 +160,7 @@
                               <Label fx:id="batLevel" text="Battery state: " />
                               <Label fx:id="heightL" text="Height: " />
                               <Label fx:id="speed" text="Speed:" />
+                              <Label fx:id="headingLabel" text="Heading: " />
                            </children>
                            <padding>
                               <Insets left="4.0" top="4.0" />
