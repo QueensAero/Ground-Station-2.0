@@ -25,7 +25,7 @@ public class dataManager {
 	private static final Logger log = Logger.getLogger(dataManager.class.getName());
 	private static final DecimalFormat df = new DecimalFormat("#.##");
 	private static final DecimalFormat df4 = new DecimalFormat("#.####");
-	
+
 	//Transmission constants (all private by default, not written for clarity)
 	static final char DROP_OPEN = 'o', DROP_CLOSE = 'c', BATT_V = 'b';
 	static final char AUTO_ON = 'a', AUTO_OFF = 'n';
@@ -33,27 +33,29 @@ public class dataManager {
 	static final char PACKET_START = '*', PACKET_END = 'e';
 	static final String[] FIX_TYPE = {"invalid", "GPS fix (SPS)", "DGPS fix",  "PPS fix", "Real Time Kinematic", "Float RTK", "estimated (dead reckoning) (2.3 feature)", "Manual input mode", "Simulation mode"};
 	static final String[] ON_MAP = {"unknown", "left of map", "right of map", "above map", "below map", "on map"};
-	
+
 	//Class Constructor
 	public dataManager(GUIController _cont) {
 		cont = _cont;
+		log.addHandler(GUIController.taHandle);
+		log.addHandler(GUIController.filehandle);
 		distToOrg = distTrav = battState = HDOP = altAlt = altGPS = speed = sValid = satelites = btsAv = 0;
 		fixType = FIX_TYPE[0];
 		path = new ArrayList<tuple>();
 		update();
 	}
-	//Returns list of GPS coordinates 
+	//Returns list of GPS coordinates
 	public ArrayList<tuple> getPath() {return path; }
-	
+
 	//Formats number to 2 decimal places
 	public String getFormatted(double inp) {return df.format(inp); }
-	
+
 	//Formats number to 4 decimal places
 	public String getFormatted4(double inp) {return df4.format(inp); }
-	
+
 	//Passes communicator class
 	public void passComm(SerialCommunicator _comm) {comm = _comm; }
-	
+
 	//Checks status of connections for warnings
 	public void statusChecks(double packDelta) {
 		boolean badConn = false;

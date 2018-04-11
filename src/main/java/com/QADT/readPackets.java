@@ -12,7 +12,7 @@ public class readPackets implements Runnable {
 	private int datInd, badData;
 	private Thread t;
 	private InputStream in;
-	
+
 	//Transmission constants (all private by default, not written for clarity)
 	static final char DROP_OPEN = 'o', DROP_CLOSE = 'c';
 	static final char AUTO_ON = 'a', AUTO_OFF = 'n';
@@ -20,9 +20,11 @@ public class readPackets implements Runnable {
 	static final char PACKET_START = '*', PACKET_END = 'e';
 	static final char KILL_THREAD = 'K';
 	protected static final int PACKET_LENGTH = 42, BAD_COUNT = 50;
-	
-	//Initializes 
+
+	//Initializes
 	public readPackets(SerialCommunicator _comm) {
+		log.addHandler(GUIController.taHandle);
+		log.addHandler(GUIController.filehandle);
 		comm = _comm;
 		reset();
 		datPack = new byte[PACKET_LENGTH];
@@ -67,14 +69,14 @@ public class readPackets implements Runnable {
 				continue;
 			} else if(in == null)
 				in = comm.getInputStream();
-			
+
 			try {if(in.available()  <= 0) {continue; }} catch(IOException e) {} //Don't proceed if there are not bytes availible to read.
 			
 			//Collection
 			if(badData < 50 && !badRun)
 				badData = 5;
 			badRun = false;
-			
+
 			pop = true;
 			while(pop) {
 				try {
@@ -146,7 +148,7 @@ public class readPackets implements Runnable {
 					reset();
 				}
 				datInd++;
-			}	
+			}
 		}
 	}
 }

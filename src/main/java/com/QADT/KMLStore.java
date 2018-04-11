@@ -23,7 +23,7 @@ public class KMLStore {
 		private String name;
 		private float longitude;
 		private float latitude;
-		public Placemark(String id, float lng, float lat) {
+		public Placemark(String id, float lat, float lng) {
 			name = id;
 			longitude =  lng;
 			latitude = lat;
@@ -44,7 +44,7 @@ public class KMLStore {
 		log.log(Level.FINER, "KML storing object initialized.");
 	}
 	public void addCord(String id, float lng, float lat) {
-		coords.add(new Placemark(id, lng, lat));
+		coords.add(new Placemark(id, lat, lng));
 		log.log(Level.FINEST, "Adding new coordinate");
 	}
 	public void exportKML() {
@@ -87,7 +87,7 @@ public class KMLStore {
 				newBit.appendChild(pt);
 				//Add coordinates
 				Element coordinates = KMLOut.createElement("coordinates");
-				String cordStr = Float.toString(cord.getLat()) + "," + Float.toString(cord.getLng()) + ",0";
+				String cordStr = Float.toString(cord.getLng()) + "," + Float.toString(cord.getLat()) + ",0";
 				coordinates.appendChild(KMLOut.createTextNode(cordStr));
 				pt.appendChild(coordinates);
 				log.log(Level.FINEST, "Coordinate added."); 
