@@ -23,11 +23,10 @@ public class dataManager {
 	private int numImages;
 	private String filepath;
 
-	//TODO: change filepath to currently commented out filepath
 	public dataManager() throws FileNotFoundException{
 		numImages = 0;
-		filepath = System.getProperty("user.dir");
-		//filepath = "C:\\Users\\Michael\\Documents\\AERO1\\Photo_Viewer";
+		filepath = System.getProperty("user.dir") + "\\photos";
+		System.out.println(filepath);
 		fetchImages();
 		fetchCoordinates(filepath);	//gets gps coordinates, heights and headings
 	}
