@@ -19,13 +19,16 @@ public class TextAreaHandler extends StreamHandler {
         super.publish(record);
         flush();
 
-        //set max number of messages displayed to 100
-        if(++numMessages>100){
-        	numMessages = 100;
-        	textArea.replaceText(0, textArea.getText().indexOf("\n",textArea.getText().indexOf("\n")+1)+1,"");
-        }
-        if (textArea != null) {
-            textArea.appendText(getFormatter().format(record));
+        //check level of record to make sure it should be logged
+        if(record.getLevel().intValue() >= this.getLevel().intValue()){
+        	//set max number of messages displayed to 100
+        	if(++numMessages>100){
+        		numMessages = 100;
+        		textArea.replaceText(0, textArea.getText().indexOf("\n",textArea.getText().indexOf("\n")+1)+1,"");
+        	}
+        	if (textArea != null) {
+        		textArea.appendText(getFormatter().format(record));
+        	}
         }
     }
 

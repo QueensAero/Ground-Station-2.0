@@ -22,6 +22,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
@@ -55,6 +56,8 @@ public class GUIController {
 	TextArea infoPane;
 	@FXML
 	Button connInfo, discButt, mapUpdate, tempButt, closeButt, conUpButt, cameraControl;
+	@FXML
+	MenuItem FINEST, FINER, FINE, CONFIG, INFO, WARNING, SEVERE;
 
 	//Status labels
 	//@FXML
@@ -496,6 +499,12 @@ public class GUIController {
 			}
 		});
 	}
+	public void setTALevel(ActionEvent event){
+		MenuItem m = (MenuItem) event.getSource();
+		String level = m.getId();
+		taHandle.setLevel(Level.parse(level));
+		System.out.println(taHandle.getLevel().intValue());
+	}
 	public void getConInfo()  {comm.getConnInfo(); }
 	public void openBay() {datM.openBay();	}
 	public void closeBay() {datM.closeBay(); }
@@ -504,5 +513,4 @@ public class GUIController {
 	public void camRight(){comm.sendByte((byte)'r'); }
 	public void camDown(){comm.sendByte((byte)'d'); }
 	public void clearTextArea(){infoPane.clear();}
-	public void setTALevel(String level){taHandle.setLevel(Level.parse(level));}
 }

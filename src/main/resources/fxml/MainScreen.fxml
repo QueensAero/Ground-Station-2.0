@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -16,7 +21,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.TextFlow?>
 
-<GridPane fx:id="mainPane" hgap="3.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" vgap="3.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane fx:id="mainPane" hgap="3.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" vgap="3.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="261.77783203125" minWidth="10.0" percentWidth="40.0" prefWidth="148.4444580078125" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="331.5555419921875" minWidth="10.0" percentWidth="20.0" prefWidth="279.5555419921875" />
@@ -37,7 +42,19 @@
             <Label text="Info stream">
                <font>
                   <Font size="14.0" />
-               </font></Label>
+               </font>
+            </Label>
+            <MenuButton mnemonicParsing="false" text="Choose Level">
+              <items>
+                <MenuItem fx:id="FINEST" mnemonicParsing="false" onAction="#setTALevel" text="FINEST" />
+                <MenuItem fx:id="FINER" mnemonicParsing="false" onAction="#setTALevel" text="FINER" />
+                  <MenuItem fx:id="FINE" mnemonicParsing="false" onAction="#setTALevel" text="FINE" />
+                  <MenuItem fx:id="CONFIG" mnemonicParsing="false" onAction="#setTALevel" text="CONFIG" />
+                  <MenuItem fx:id="INFO" mnemonicParsing="false" onAction="#setTALevel" text="INFO" />
+                  <MenuItem fx:id="WARNING" mnemonicParsing="false" onAction="#setTALevel" text="WARNING" />
+                  <MenuItem fx:id="SEVERE" mnemonicParsing="false" onAction="#setTALevel" text="SEVERE" />
+              </items>
+            </MenuButton>
             <TextArea fx:id="infoPane" editable="false" prefHeight="200.0" prefWidth="200.0">
                <padding>
                   <Insets left="3.0" right="3.0" />
