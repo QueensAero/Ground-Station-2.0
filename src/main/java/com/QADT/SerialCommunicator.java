@@ -22,7 +22,7 @@ public class SerialCommunicator {
 	private InputStream in;
 	private OutputStream out;
 	private static final Logger log = Logger.getLogger(SerialCommunicator.class.getName());
-	private boolean connected;
+	private boolean connected, readFirstLaunch = true;
 	private GUIController contrl;
 	protected dataManager datM;
 	protected String portName;
@@ -81,20 +81,23 @@ public class SerialCommunicator {
 		}
 	}
 	public void resuscitate() {
-		if(hold)
-			return;
+		//Make sure threads aren't double launched
+		if(hold) return;
 		hold = true;
+		//Get Status of threads
 		boolean read = readThread == null, time = timer == null;
+		//Launch timer if its not started
 		if(time) {
 			timer = new Timer();
 			timer.schedule(new ThreadCheck(), 0, 100);
 			log.info("Timer was started!");
 		}
-
 		if(read || !readThread.isAlive()) {
 			reader = new readPackets(this);
 			readThread = reader.start();
-			if(read)
+			if(read && readFirstLaunch)
+				log.info("Packet reader started!");
+			else if(read)
 				log.severe("Thread was just resuscitated!");
 		}
 		hold = false;

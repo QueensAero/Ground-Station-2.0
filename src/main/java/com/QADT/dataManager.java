@@ -126,7 +126,7 @@ public class dataManager {
 		}
 		float distFromLast = getDistance(path.get(path.size()-1),newLoc);
 		//check if new location more than 200m away from last point, if so don't add point
-		if(distFromLast<=100 || true) {
+		if(distFromLast<=200 || true) { //Get ride of || true after more testing...
 			distTrav += distFromLast;
 			distToOrg = getDistance(path.get(0),newLoc);
 			path.add(newLoc);

@@ -104,8 +104,11 @@ public class GUIController {
 	protected static FileHandler filehandle = null;
 	protected static TextAreaHandler taHandle = new TextAreaHandler();
 
-
-
+	@FXML
+	public void resuscitate() {
+		comm.resuscitate();
+		log.info("Called a manual resuscitation");
+	}
 	@FXML
 	public void initialize() {
 		log.setLevel(Level.ALL);
@@ -162,47 +165,16 @@ public class GUIController {
 		MapPane.getChildren().add(mapCan);
 		gc = mapCan.getGraphicsContext2D();
 		gc.setStroke(Color.RED);
-		gc.setLineWidth(5);
+		gc.setLineWidth(2);
 		log.info("Canvas initialized.");
 	}
-
-	//Draws the path of the aircraft from scratch
-	public void drawPath() {
-		if(mapCan == null)
-			drawMap();
-		if(lastPoint != -1) {
-			updatePath();
-			return;
-		}
-		gc.setStroke(Color.RED);
-		gc.setLineWidth(3);
-		tuple pt;
-		gc.beginPath();
-		for(tuple _pt : path) {
-			pt = toCanvas(_pt);
-			if(pt.x == -1)
-				continue;
-			/*
-			else if(pt == path.get(0))
-				gc.moveTo(pt.x, pt.y);
-			else
-				gc.lineTo(pt.x, pt.y);
-				*/
-			else
-				gc.strokeRect(pt.x, pt.y, 2, 2);
-		}
-		lastPoint = path.size() - 1;
-		gc.stroke();
-		log.info("Path drawn.");
-	}
-
 	private void initVideoCan() {
 		if(vidCan != null) return;
 		vidCan = new Canvas(videoPane.getWidth(), videoPane.getHeight());
 		videoPane.getChildren().add(vidCan);
 		gv = vidCan.getGraphicsContext2D();
 		gv.setStroke(Color.BLACK);
-		gv.setLineWidth(5);
+		gv.setLineWidth(2);
 		imV = new ImageView();
 		videoPane.getChildren().add(imV);
 		imV.setFitHeight(videoPane.getHeight());
@@ -241,7 +213,6 @@ public class GUIController {
 			});
 		}
 	}
-
 	public void runVideo() {
 		//Initialization
 		initVideoCan();
@@ -281,49 +252,32 @@ public class GUIController {
 		path.add(new tuple(123, 456, -789, 012, 345));
 	}
 	public void testDraw() {
-		ArrayList<tuple> arr = new ArrayList<>();
-		arr.add(new tuple(baseLng, baseLat));
-		arr.add(new tuple(baseLng, topLat));
-		arr.add(new tuple(topLng, topLat));
-		arr.add(new tuple(topLng, baseLat));
-
 		//ILC and Union-University
-		arr.add(new tuple(-76.492984, 44.227752));
-		arr.add(new tuple(-76.495606, 44.227921));
-
-		for(int i=0;i<10;i++)
-			arr.add(new tuple(-76.495618 + 0.000100*i, 44.227920));
-
-		if(pt >= arr.size()) {return; }
-		gc.setStroke(Color.RED);
-		gc.setLineWidth(5);
-		tuple point = toCanvas(arr.get(++pt));
-		gc.strokeRect(point.x, point.y, 10, 10);
-
-		log.info("Point drawn.");
+		path.add(new tuple(-76.492984, 44.227752));
+		path.add(new tuple(-76.495606, 44.227921));
+		path.add(new tuple(-77.495606, 44.227921));
+		lastPoint = 0;
+		drawPath();
+		log.info("Test drawn!");
 	}
 	//Updates the path (as not to redraw all previous points
-	public void updatePath() {
-		if(path.size() == lastPoint + 1)
-			return;
-		gc.setStroke(Color.RED);
-		gc.setLineWidth(3);
-		int i;
+	public void drawPath() {
+		if(mapCan == null) drawMap();
+		if(path.size() == lastPoint + 1) return;
 		tuple pt;
 		gc.beginPath();
-		for(i=lastPoint;i<path.size();i++)  {
+		for(int i=lastPoint;i<path.size();i++)  {
 			pt = toCanvas(path.get(i));
+			log.info("Point at: " + pt.toString());
 			if(pt.x == -1)
 				continue;
 			else if(i == lastPoint)
-				gc.strokeRect(pt.x, pt.y, 4, 4);
-				//gc.moveTo(pt.x, pt.y);
+				gc.moveTo(pt.x, pt.y);
 			else
-				gc.strokeRect(pt.x, pt.y, 4, 4);
-				//gc.lineTo(pt.x, pt.y);
+				gc.lineTo(pt.x, pt.y);
 		}
 		gc.stroke();
-		log.finer("Path updated.");
+		log.finest("Path updated.");
 	}
 	//Draws the map onto the page
 	public void drawMap() {
@@ -342,7 +296,6 @@ public class GUIController {
 			return;
 		}
 		float scl = getScale(im);
-		//System.out.println(baseXOffset + " - " + baseYOffset);
 		gc.drawImage(im, 0, 0, scl*im.getWidth(), scl*im.getHeight());
 		log.info("Map drawn");
 		Platform.runLater(new Runnable() {
@@ -483,14 +436,14 @@ public class GUIController {
 	private tuple toCanvas(tuple src) {
 		double lng = src.x, lat = src.y;
 		double imWid = mapCan.getWidth() - baseXOffset, imHt = mapCan.getHeight() - baseYOffset;
-		boolean left = lng > baseLng, right = lng < topLng, bottom = lat < baseLat, top = lat > topLat;
+		boolean left = lng < baseLng, right = lng > topLng, bottom = lat < baseLat, top = lat > topLat;
 
 		if(mapWarn = (left || right|| top || bottom)) {
 			if(left) 		mapRel = 1;
 			else if(right) 	mapRel = 2;
 			else if(top) 	mapRel = 4;
 			else if(bottom) mapRel = 3;
-
+			log.severe(src.toString());
 			return new tuple(-1, -1);
 		}
 		mapRel = 5;
