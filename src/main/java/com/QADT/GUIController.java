@@ -510,7 +510,7 @@ public class GUIController {
 	public void closeBay() {datM.closeBay(); }
 	public void camLeft(){comm.sendByte((byte)'l'); }
 	public void camUp(){comm.sendByte((byte)'u'); }
-	public void camRight(){comm.sendByte((byte)'r'); }
+	public void camRight(){comm.sendByte((byte)'e'); }
 	public void camDown(){comm.sendByte((byte)'d'); }
 	public void clearTextArea(){infoPane.clear();}
 }
