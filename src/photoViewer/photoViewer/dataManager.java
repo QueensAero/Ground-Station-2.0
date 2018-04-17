@@ -26,7 +26,6 @@ public class dataManager {
 	public dataManager() throws FileNotFoundException{
 		numImages = 0;
 		filepath = System.getProperty("user.dir") + "\\photos";
-		System.out.println(filepath);
 		fetchImages();
 		fetchCoordinates(filepath);	//gets gps coordinates, heights and headings
 	}
