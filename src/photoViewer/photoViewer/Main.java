@@ -66,7 +66,6 @@ public class Main extends Application {
 			KMLStore coordinates = new KMLStore();
 			for(int i = 0;i<points.size();i++){
 				coordinates.addCord(ids.get(i),(float) points.get(i).x,(float)points.get(i).y);
-				System.out.println("("+ids.get(i)+","+points.get(i).x+","+points.get(i).y+")");
 			}
 			coordinates.exportKML();
 		});
