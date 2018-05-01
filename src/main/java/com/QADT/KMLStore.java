@@ -45,7 +45,6 @@ public class KMLStore {
 	}
 	public void addCord(String id, float lat, float lng) {
 		coords.add(new Placemark(id, lat, lng));
-		log.log(Level.FINEST, "Adding new coordinate");
 	}
 	public void exportKML() {
 		log.log(Level.INFO, "KML export requested.");

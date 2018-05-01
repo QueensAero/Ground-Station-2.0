@@ -9,6 +9,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,6 +46,7 @@ import org.opencv.videoio.VideoCapture;
 import org.opencv.core.Core;
 
 public class GUIController {
+	//Link OpenCV dependencies
 	static{ System.loadLibrary(Core.NATIVE_LIBRARY_NAME); }
 
 	//FXML declarations
@@ -63,7 +67,7 @@ public class GUIController {
 	//@FXML
 	Canvas testCan, mapCan;
 	@FXML
-	Label vHDOP, packTime, speed, bytesAvail, satNum, heightL, pointsTaken, mapTop, mapBase;
+	Label vHDOP, packTime, speed, bytesAvail, satNum, heightL, pointsTaken, mapTop, mapBase, dataPLabel, picPLabel;
 	@FXML
 	Label orginDist, travDist, batLevel, hdop, connState, packetsR, packRateLabel, fixTp, headingLabel;
 
@@ -73,10 +77,10 @@ public class GUIController {
 	private boolean xbeeWarn, GPSWarn, battWarn, serialWarn, warnChange, mapWarn;
 
 	//Warning methods
-	public void setXW(boolean st) {xbeeWarn = st; warnC(); }
-	public void setGW(boolean st) {GPSWarn = st; warnC(); }
-	public void setBW(boolean st) {battWarn = st; warnC(); }
-	public void setSW(boolean st) {serialWarn = st; warnC(); }
+	public void setXW(boolean st) {xbeeWarn = st; warnC(); }	//Xbee
+	public void setGW(boolean st) {GPSWarn = st; warnC(); }		//GPS
+	public void setBW(boolean st) {battWarn = st; warnC(); }	//Battery
+	public void setSW(boolean st) {serialWarn = st; warnC(); }	//Serial
 	public boolean getXW() {return xbeeWarn; }
 	public boolean getGW() {return GPSWarn; }
 	public boolean getBW() {return battWarn; }
@@ -107,18 +111,32 @@ public class GUIController {
 	protected static FileHandler filehandle = null;
 	protected static TextAreaHandler taHandle = new TextAreaHandler();
 
+	//Adds the logger handler to the other loggers
+	protected static void addLogHandler(Logger _log) {
+		_log.addHandler(taHandle);
+		_log.addHandler(filehandle);
+	}
+	
+	//FXML call to save/check on reader
 	@FXML
 	public void resuscitate() {
 		comm.resuscitate();
 		log.info("Called a manual resuscitation");
 	}
+	
+	//Initialize method called on launch of GUI
 	@FXML
 	public void initialize() {
-		log.setLevel(Level.ALL);
+		log.setLevel(Level.INFO);
 		taHandle.setTextArea(infoPane);
 		//Setup logger
 		try {
-			String fileName = new SimpleDateFormat("'log_'yyyy'_'MM'_'dd'_'HH'_'mm'.txt'").format(new Date());
+			String folderName = "log/";
+			String fileName = folderName + new SimpleDateFormat("'log_'yyyy'_'MM'_'dd'_'HH'_'mm'.xml'").format(new Date());
+			if(!Files.exists(Paths.get(folderName))) {
+				new File(folderName).mkdir();
+				log.info("Made a new folder for logged files");
+			}
 			filehandle = new FileHandler(fileName);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -128,6 +146,7 @@ public class GUIController {
 		path = datM.getPath();
 		vc = new VideoCapture();
 		connButtSt(false);
+		lastPoint = 0;
 
 		log.addHandler(taHandle);
 		log.addHandler(filehandle);
@@ -171,6 +190,8 @@ public class GUIController {
 		gc.setLineWidth(2);
 		log.info("Canvas initialized.");
 	}
+	
+	//Initialize video canvas
 	private void initVideoCan() {
 		if(vidCan != null) return;
 		vidCan = new Canvas(videoPane.getWidth(), videoPane.getHeight());
@@ -258,7 +279,7 @@ public class GUIController {
 		//ILC and Union-University
 		path.add(new tuple(-76.492984, 44.227752));
 		path.add(new tuple(-76.495606, 44.227921));
-		path.add(new tuple(-77.495606, 44.227921));
+		//path.add(new tuple(-77.495606, 44.227921)); //Test point outside map
 		lastPoint = 0;
 		drawPath();
 		log.info("Test drawn!");
@@ -269,9 +290,8 @@ public class GUIController {
 		if(path.size() == lastPoint + 1) return;
 		tuple pt;
 		gc.beginPath();
-		for(int i=lastPoint;i<path.size();i++)  {
+		for(int i=lastPoint;i<path.size()-1;i++)  {
 			pt = toCanvas(path.get(i));
-			log.info("Point at: " + pt.toString());
 			if(pt.x == -1)
 				continue;
 			else if(i == lastPoint)
@@ -446,7 +466,8 @@ public class GUIController {
 			else if(right) 	mapRel = 2;
 			else if(top) 	mapRel = 4;
 			else if(bottom) mapRel = 3;
-			log.severe(src.toString());
+			
+			log.severe("Point " + src.toString() + " outside of map!");
 			return new tuple(-1, -1);
 		}
 		mapRel = 5;
@@ -506,8 +527,6 @@ public class GUIController {
 		System.out.println(taHandle.getLevel().intValue());
 	}
 	public void getConInfo()  {comm.getConnInfo(); }
-	public void openBay() {datM.openBay();	}
-	public void closeBay() {datM.closeBay(); }
 	public void camLeft(){comm.sendByte((byte)'l'); }
 	public void camUp(){comm.sendByte((byte)'u'); }
 	public void camRight(){comm.sendByte((byte)'e'); }

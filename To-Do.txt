@@ -15,6 +15,7 @@ Nice to have:
 -Re-write map drawing to choose file based on selection
 -Make sure file outputs don't overwrite
 -Make folders for data and log outputs
+-Correct order of all lat/long methods so they are consistent and actually make sense
 
 When possible:
 -Make tutorial/overview document for git

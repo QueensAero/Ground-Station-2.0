@@ -2,8 +2,8 @@ package com.QADT;
 
 /** Notes on Class:
  * Based on the code from the old Java Swing version of the ground station
- * Uses a serial library that (should) work for all operating systems and doesn't have any weird dependencies (to make it easier for people)
- * Reads and parses packets asynchronously by running a parallel thread (see readPackets class)
+ * Uses a new serial library that (should) work for all operating systems and doesn't have any weird dependencies (to make it easier for people)
+ * Reads and parses packets mostly asynchronously by running a parallel thread (see readPackets class)
  */
 
 import java.io.IOException;
@@ -17,18 +17,23 @@ import java.util.logging.Logger;
 import com.fazecast.jSerialComm.SerialPort;
 
 public class SerialCommunicator {
+	//Utility constants
+	private static final Logger log = Logger.getLogger(SerialCommunicator.class.getName());
+	private GUIController contrl;
+	protected dataManager datM;
+	private readPackets reader;
+	private static Thread readThread;
+	private Timer timer;
+	
+	//Communication objects
 	private ArrayList<SerialPort> commList;
 	protected SerialPort currPort;
 	private InputStream in;
 	private OutputStream out;
-	private static final Logger log = Logger.getLogger(SerialCommunicator.class.getName());
+	
+	//Misc global variables
 	private boolean connected, readFirstLaunch = true;
-	private GUIController contrl;
-	protected dataManager datM;
 	protected String portName;
-	private static Thread readThread;
-	private readPackets reader;
-	private Timer timer;
 	protected long packsIn, packetTime;
 	protected float packRate;
 	private static boolean hold;
@@ -38,30 +43,9 @@ public class SerialCommunicator {
 	private static final String COMMAND_MODE_CMD = "+++", SWITCH_TO_AT_CMD = "ATAP0\r", EXIT_COMMAND_MODE_CMD = "ATCN\r", COMMAND_MODE_OK = "OK\r";
     private static final int INTO_CMD_MODE_TIMEOUT = 3000, RESPONSE_TIMEOUT = 750;
 
-    class ThreadCheck extends TimerTask  {
-    	public boolean running;
-    	@Override
-    	public void run() {
-    		try {
-    			datM.printPackTime();
-    		} catch(Exception e) {
-    			log.severe("Pack time error!");
-    			e.printStackTrace();
-    		}
-    		try {
-        		resuscitate();
-    		} catch(Exception e) {
-    			log.severe("Reader thread error!");
-    			e.printStackTrace();
-    		}
-    		contrl.updateWarnStyle();
-    	}
-    }
-
 	//Constructor
 	public SerialCommunicator(GUIController cont, dataManager _datM) {
-		log.addHandler(GUIController.taHandle);
-		log.addHandler(GUIController.filehandle);
+		GUIController.addLogHandler(log);
 		hold = false;
 		datM = _datM;
 		contrl = cont;
@@ -71,6 +55,35 @@ public class SerialCommunicator {
 		packsIn = -1;
 		updatePackTime();
 	}
+	
+	//Extension of default timer to periodically check status of connection and print data
+    class ThreadCheck extends TimerTask  {
+    	public boolean running;
+    	
+    	@Override
+    	public void run() {
+    		//Tries to print the time since the last packet
+    		try {
+    			datM.printPackTime();
+    		} catch(Exception e) {
+    			log.severe("Pack time error!");
+    			e.printStackTrace();
+    		}
+    		
+    		//Tries to rescue the reader thread in the case that it crashes
+    		try {
+        		resuscitate();
+    		} catch(Exception e) {
+    			log.severe("Reader thread error!");
+    			e.printStackTrace();
+    		}
+    		
+    		//Updates warnings
+    		contrl.updateWarnStyle();
+    	}
+    }
+    
+    //Method to kill the thread on exit
 	public void killThread()  {
 		timer.cancel();
 		timer = null;
@@ -80,18 +93,22 @@ public class SerialCommunicator {
 			kill = !readThread.isAlive();
 		}
 	}
+	
+	//Initializes reader and/or saves it if it crashess
 	public void resuscitate() {
-		//Make sure threads aren't double launched
-		if(hold) return;
+		if(hold) return;	//Make sure threads aren't double launched
 		hold = true;
+		
 		//Get Status of threads
 		boolean read = readThread == null, time = timer == null;
+		
 		//Launch timer if its not started
 		if(time) {
 			timer = new Timer();
 			timer.schedule(new ThreadCheck(), 0, 100);
 			log.info("Timer was started!");
 		}
+		//Launch reader if its not alive
 		if(read || !readThread.isAlive()) {
 			reader = new readPackets(this);
 			readThread = reader.start();
@@ -102,21 +119,35 @@ public class SerialCommunicator {
 		}
 		hold = false;
 	}
+	//Updates pack time when a new packet is received
     protected void updatePackTime() {
     	packRate = (float)1000/getPackTime();
     	packetTime = System.currentTimeMillis();
     	packsIn++;
 	}
+    //Calculates time since last data packet
     protected long getPackTime() {return System.currentTimeMillis() - packetTime; }
-	public boolean threadAlive() {return readThread.isAlive(); }
-	public SerialPort getSerialPort() {return currPort; }
+	
+    //Returns whether the reader is alive
+    public boolean threadAlive() {return readThread.isAlive(); }
+	
+    //Returns the serial port object
+    public SerialPort getSerialPort() {return currPort; }
+    
+    //Returns input stream
 	protected InputStream getInputStream() {return in; }
+	
+	//Returns port status
 	public boolean getPortStatus() {
 		if(currPort != null)
 			return currPort.isOpen();
 		return false;
 	}
+	
+	//Updates the list of active serial ports
 	public void updateCommList() {commList = new ArrayList<SerialPort>(Arrays.asList(SerialPort.getCommPorts())); }
+	
+	//Returns list of active serial devices
 	public ArrayList<String> getCommList() {
 		updateCommList();
 		ArrayList<String> newList = new ArrayList<>();
@@ -124,35 +155,45 @@ public class SerialCommunicator {
 			newList.add(pt.getDescriptivePortName());
 		return newList;
 	}
+	
+	//Get ID of a given serial port
 	public int getPortId(String portName) {
 		log.finer(portName + "'s index is at " + getCommList().indexOf(portName));
 		return getCommList().indexOf(portName);
 	}
+	
+	//Establishes connection with a given serial device
 	public boolean openConnection(int portId) {
-		if(portId < 0 || commList.size() - 1 < portId) {
+		if(portId < 0 || commList.size() - 1 < portId) { //Ensure device ID is valid
 			log.fine("Port index out of range.");
 			return false;
 		}
 		portName = commList.get(portId).getDescriptivePortName();
 		currPort = SerialPort.getCommPort(commList.get(portId).getSystemPortName());
-		if(!currPort.openPort()) {
+		if(!currPort.openPort()) {	//Attempt to open connection
 			log.severe("Failed to open connection");
 			return false;
 		}
 		log.info("Connection established.");
-		currPort.setBaudRate(BAUD_RATE);
+		currPort.setBaudRate(BAUD_RATE);	//Sets connection speed
 		out = currPort.getOutputStream();
 		in = currPort.getInputStream();
-		contrl.connButtSt(true);
-		flushInput(Integer.MAX_VALUE);
-		initXbee();
+		contrl.connButtSt(true);	//Enables ability to close connection
+		flushInput(Integer.MAX_VALUE);	//Flushes any data that had tried to be pushed to the port previously
+		initXbee();		//Sends specific constants to configure connection to Xbee
 		connected = true;
 
 		return true;
 	}
+	
+	//Closes serial connection
 	public boolean closeConnection() {
+		if(!connected) {	//Breaks if there is no connection established
+			log.warning("Port was already closed.");
+			return true;
+		}
 		connected = false;
-		if(currPort.closePort()) {
+		if(currPort.closePort()) {	//Closes connection
 			log.info("Connection closed");
 			in = null;
 			out = null;
@@ -162,9 +203,13 @@ public class SerialCommunicator {
 		connected = true;
 		return false;
 	}
+	
+	//Clears bytes in input buffer
 	public void flushInput() {
 		flushInput(200);
 	}
+	
+	//Clears a specific number of bytes from the input buffer
 	public void flushInput(int lim) {
 		int limit = 0;
 		try {
@@ -176,7 +221,11 @@ public class SerialCommunicator {
 		}
 		log.finer("Successfully flushed input buffer");
 	}
+	
+	//Returns the state of the serial connection
 	public boolean getState() {return connected; }
+	
+	//Returns information about the current serial connection
 	public void getConnInfo() {
 		if(!connected) {
 			log.info("Not connected.");
@@ -189,6 +238,8 @@ public class SerialCommunicator {
 		info += currPort.getWriteTimeout() + "ms for write";
 		log.info(info);
 	}
+	
+	//Sends a given byte
 	public void sendByte(byte b) {
 		if(!connected) {
 			log.severe("Failed to send " + b + ", no connection.");
@@ -198,6 +249,8 @@ public class SerialCommunicator {
 		currPort.writeBytes(bA, 1);
 		log.finest(b + " sent");
 	}
+	
+	//Sends an array of bytes to serial device
 	public void writeData(byte[] b) {
 		if(!connected) {
 			log.severe("Failed to send " + b + ", no connection.");
@@ -206,6 +259,8 @@ public class SerialCommunicator {
 		currPort.writeBytes(b, b.length);
 		log.finest(b + " sent");
 	}
+	
+	//Write a byte to the device then waits (used to initialize Xbee)
 	public boolean writeAndWait(String cmd, int time) {
 		int tries = 3;
 		try {
@@ -229,6 +284,9 @@ public class SerialCommunicator {
 		}
 		return false;
 	}
+	
+	//Initializes Xbee by sending a specific sequence of bytes seen below
+	//See Xbee manual for meaning of each command (essentially just changing the operating mode of it)
 	private boolean initXbee() {
 		if(!writeAndWait(COMMAND_MODE_CMD, INTO_CMD_MODE_TIMEOUT)) {
 			log.severe("Failed to enter command mode.");

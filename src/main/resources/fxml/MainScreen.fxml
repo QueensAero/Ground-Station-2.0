@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
@@ -21,7 +17,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.TextFlow?>
 
-<GridPane fx:id="mainPane" hgap="3.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" vgap="3.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane fx:id="mainPane" hgap="3.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" vgap="3.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="261.77783203125" minWidth="10.0" percentWidth="40.0" prefWidth="148.4444580078125" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="331.5555419921875" minWidth="10.0" percentWidth="20.0" prefWidth="279.5555419921875" />
@@ -74,8 +70,6 @@
                </children>
             </TextFlow>
             <Button fx:id="closeButt" mnemonicParsing="false" onAction="#close" text="Close" />
-            <Button fx:id="openButt" mnemonicParsing="false" onAction="#openBay" text="Open bay" />
-            <Button fx:id="closeButt" mnemonicParsing="false" onAction="#closeBay" text="Close bay" />
             <Button mnemonicParsing="false" onAction="#testDraw" text="test" />
          </children>
          <padding>
@@ -195,6 +189,8 @@
                               <Label fx:id="bytesAvail" text="Bytes availible: " />
                               <Label fx:id="packetsR" text="Packets received: " />
                               <Label fx:id="packRateLabel" text="Pack rate: " />
+                              <Label fx:id="dataPLabel" text="Data Packets: " />
+                              <Label fx:id="picPLabel" text="Picture Packets:" />
                            </children>
                            <padding>
                               <Insets left="4.0" top="4.0" />

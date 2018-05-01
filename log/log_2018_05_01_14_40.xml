@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="windows-1252" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2018-05-01T14:40:57</date>
+  <millis>1525200057499</millis>
+  <sequence>0</sequence>
+  <logger>com.QADT.SerialCommunicator</logger>
+  <level>INFO</level>
+  <class>com.QADT.SerialCommunicator</class>
+  <method>resuscitate</method>
+  <thread>13</thread>
+  <message>Timer was started!</message>
+</record>
+<record>
+  <date>2018-05-01T14:40:57</date>
+  <millis>1525200057513</millis>
+  <sequence>1</sequence>
+  <logger>com.QADT.SerialCommunicator</logger>
+  <level>INFO</level>
+  <class>com.QADT.SerialCommunicator</class>
+  <method>resuscitate</method>
+  <thread>13</thread>
+  <message>Packet reader started!</message>
+</record>
+<record>
+  <date>2018-05-01T14:41:02</date>
+  <millis>1525200062843</millis>
+  <sequence>2</sequence>
+  <logger>com.QADT.SerialCommunicator</logger>
+  <level>INFO</level>
+  <class>com.QADT.SerialCommunicator</class>
+  <method>openConnection</method>
+  <thread>20</thread>
+  <message>Connection established.</message>
+</record>
+<record>
+  <date>2018-05-01T14:41:04</date>
+  <millis>1525200064087</millis>
+  <sequence>3</sequence>
+  <logger>com.QADT.SerialCommunicator</logger>
+  <level>INFO</level>
+  <class>com.QADT.SerialCommunicator</class>
+  <method>initXbee</method>
+  <thread>20</thread>
+  <message>Xbee successfully initialized.</message>
+</record>
+<record>
+  <date>2018-05-01T14:41:07</date>
+  <millis>1525200067593</millis>
+  <sequence>4</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>INFO</level>
+  <class>com.QADT.readPackets$1</class>
+  <method>run</method>
+  <thread>35</thread>
+  <message>Picture packet.</message>
+</record>
+<record>
+  <date>2018-05-01T14:41:14</date>
+  <millis>1525200074253</millis>
+  <sequence>5</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>INFO</level>
+  <class>com.QADT.readPackets$1</class>
+  <method>run</method>
+  <thread>62</thread>
+  <message>Picture packet.</message>
+</record>
+<record>
+  <date>2018-05-01T14:41:29</date>
+  <millis>1525200089045</millis>
+  <sequence>6</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>INFO</level>
+  <class>com.QADT.readPackets</class>
+  <method>run</method>
+  <thread>18</thread>
+  <message>Thread killed successfully.</message>
+</record>
+<record>
+  <date>2018-05-01T14:41:29</date>
+  <millis>1525200089160</millis>
+  <sequence>7</sequence>
+  <logger>com.QADT.SerialCommunicator</logger>
+  <level>INFO</level>
+  <class>com.QADT.SerialCommunicator</class>
+  <method>closeConnection</method>
+  <thread>13</thread>
+  <message>Connection closed</message>
+</record>
+<record>
+  <date>2018-05-01T14:41:29</date>
+  <millis>1525200089162</millis>
+  <sequence>8</sequence>
+  <logger>com.QADT.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QADT.GUIController</class>
+  <method>close</method>
+  <thread>13</thread>
+  <message>Interface closed.</message>
+</record>
+</log>

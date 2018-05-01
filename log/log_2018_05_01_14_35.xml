@@ -1,0 +1,1082 @@
+<?xml version="1.0" encoding="windows-1252" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2018-05-01T14:35:25</date>
+  <millis>1525199725295</millis>
+  <sequence>0</sequence>
+  <logger>com.QADT.SerialCommunicator</logger>
+  <level>INFO</level>
+  <class>com.QADT.SerialCommunicator</class>
+  <method>resuscitate</method>
+  <thread>13</thread>
+  <message>Timer was started!</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:25</date>
+  <millis>1525199725309</millis>
+  <sequence>1</sequence>
+  <logger>com.QADT.SerialCommunicator</logger>
+  <level>INFO</level>
+  <class>com.QADT.SerialCommunicator</class>
+  <method>resuscitate</method>
+  <thread>13</thread>
+  <message>Packet reader started!</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:29</date>
+  <millis>1525199729942</millis>
+  <sequence>2</sequence>
+  <logger>com.QADT.SerialCommunicator</logger>
+  <level>INFO</level>
+  <class>com.QADT.SerialCommunicator</class>
+  <method>openConnection</method>
+  <thread>20</thread>
+  <message>Connection established.</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:31</date>
+  <millis>1525199731188</millis>
+  <sequence>3</sequence>
+  <logger>com.QADT.SerialCommunicator</logger>
+  <level>INFO</level>
+  <class>com.QADT.SerialCommunicator</class>
+  <method>initXbee</method>
+  <thread>20</thread>
+  <message>Xbee successfully initialized.</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:31</date>
+  <millis>1525199731460</millis>
+  <sequence>4</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:31</date>
+  <millis>1525199731956</millis>
+  <sequence>5</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:32</date>
+  <millis>1525199732468</millis>
+  <sequence>6</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:32</date>
+  <millis>1525199732964</millis>
+  <sequence>7</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:33</date>
+  <millis>1525199733493</millis>
+  <sequence>8</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:33</date>
+  <millis>1525199733973</millis>
+  <sequence>9</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:34</date>
+  <millis>1525199734469</millis>
+  <sequence>10</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:34</date>
+  <millis>1525199734965</millis>
+  <sequence>11</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:35</date>
+  <millis>1525199735478</millis>
+  <sequence>12</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:35</date>
+  <millis>1525199735974</millis>
+  <sequence>13</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:36</date>
+  <millis>1525199736470</millis>
+  <sequence>14</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:36</date>
+  <millis>1525199736983</millis>
+  <sequence>15</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:37</date>
+  <millis>1525199737479</millis>
+  <sequence>16</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:37</date>
+  <millis>1525199737991</millis>
+  <sequence>17</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:38</date>
+  <millis>1525199738487</millis>
+  <sequence>18</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:38</date>
+  <millis>1525199738984</millis>
+  <sequence>19</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:39</date>
+  <millis>1525199739496</millis>
+  <sequence>20</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:40</date>
+  <millis>1525199740024</millis>
+  <sequence>21</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:40</date>
+  <millis>1525199740488</millis>
+  <sequence>22</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:41</date>
+  <millis>1525199741001</millis>
+  <sequence>23</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:41</date>
+  <millis>1525199741497</millis>
+  <sequence>24</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:41</date>
+  <millis>1525199741993</millis>
+  <sequence>25</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:42</date>
+  <millis>1525199742505</millis>
+  <sequence>26</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:43</date>
+  <millis>1525199743002</millis>
+  <sequence>27</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:43</date>
+  <millis>1525199743514</millis>
+  <sequence>28</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:44</date>
+  <millis>1525199744010</millis>
+  <sequence>29</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:44</date>
+  <millis>1525199744506</millis>
+  <sequence>30</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:45</date>
+  <millis>1525199745019</millis>
+  <sequence>31</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:45</date>
+  <millis>1525199745515</millis>
+  <sequence>32</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:46</date>
+  <millis>1525199746011</millis>
+  <sequence>33</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:46</date>
+  <millis>1525199746523</millis>
+  <sequence>34</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:47</date>
+  <millis>1525199747020</millis>
+  <sequence>35</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:47</date>
+  <millis>1525199747516</millis>
+  <sequence>36</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:47</date>
+  <millis>1525199747772</millis>
+  <sequence>37</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:48</date>
+  <millis>1525199748284</millis>
+  <sequence>38</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:48</date>
+  <millis>1525199748780</millis>
+  <sequence>39</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:49</date>
+  <millis>1525199749277</millis>
+  <sequence>40</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:49</date>
+  <millis>1525199749789</millis>
+  <sequence>41</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:50</date>
+  <millis>1525199750285</millis>
+  <sequence>42</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:50</date>
+  <millis>1525199750781</millis>
+  <sequence>43</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:51</date>
+  <millis>1525199751294</millis>
+  <sequence>44</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:51</date>
+  <millis>1525199751790</millis>
+  <sequence>45</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:52</date>
+  <millis>1525199752286</millis>
+  <sequence>46</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:52</date>
+  <millis>1525199752799</millis>
+  <sequence>47</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:53</date>
+  <millis>1525199753295</millis>
+  <sequence>48</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:53</date>
+  <millis>1525199753791</millis>
+  <sequence>49</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:54</date>
+  <millis>1525199754303</millis>
+  <sequence>50</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:54</date>
+  <millis>1525199754800</millis>
+  <sequence>51</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:55</date>
+  <millis>1525199755296</millis>
+  <sequence>52</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:55</date>
+  <millis>1525199755808</millis>
+  <sequence>53</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:56</date>
+  <millis>1525199756305</millis>
+  <sequence>54</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:56</date>
+  <millis>1525199756817</millis>
+  <sequence>55</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:57</date>
+  <millis>1525199757345</millis>
+  <sequence>56</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:57</date>
+  <millis>1525199757809</millis>
+  <sequence>57</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:58</date>
+  <millis>1525199758322</millis>
+  <sequence>58</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:58</date>
+  <millis>1525199758818</millis>
+  <sequence>59</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:59</date>
+  <millis>1525199759330</millis>
+  <sequence>60</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:35:59</date>
+  <millis>1525199759826</millis>
+  <sequence>61</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:00</date>
+  <millis>1525199760323</millis>
+  <sequence>62</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:00</date>
+  <millis>1525199760819</millis>
+  <sequence>63</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:01</date>
+  <millis>1525199761331</millis>
+  <sequence>64</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:01</date>
+  <millis>1525199761827</millis>
+  <sequence>65</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:02</date>
+  <millis>1525199762340</millis>
+  <sequence>66</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:02</date>
+  <millis>1525199762836</millis>
+  <sequence>67</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:03</date>
+  <millis>1525199763348</millis>
+  <sequence>68</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:03</date>
+  <millis>1525199763844</millis>
+  <sequence>69</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:04</date>
+  <millis>1525199764357</millis>
+  <sequence>70</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:04</date>
+  <millis>1525199764837</millis>
+  <sequence>71</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:05</date>
+  <millis>1525199765349</millis>
+  <sequence>72</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:05</date>
+  <millis>1525199765845</millis>
+  <sequence>73</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:06</date>
+  <millis>1525199766342</millis>
+  <sequence>74</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:06</date>
+  <millis>1525199766870</millis>
+  <sequence>75</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:07</date>
+  <millis>1525199767366</millis>
+  <sequence>76</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:07</date>
+  <millis>1525199767846</millis>
+  <sequence>77</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:08</date>
+  <millis>1525199768102</millis>
+  <sequence>78</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:08</date>
+  <millis>1525199768615</millis>
+  <sequence>79</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:09</date>
+  <millis>1525199769127</millis>
+  <sequence>80</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:09</date>
+  <millis>1525199769607</millis>
+  <sequence>81</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:10</date>
+  <millis>1525199770135</millis>
+  <sequence>82</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:10</date>
+  <millis>1525199770616</millis>
+  <sequence>83</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:11</date>
+  <millis>1525199771112</millis>
+  <sequence>84</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:11</date>
+  <millis>1525199771624</millis>
+  <sequence>85</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:12</date>
+  <millis>1525199772120</millis>
+  <sequence>86</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:12</date>
+  <millis>1525199772633</millis>
+  <sequence>87</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:13</date>
+  <millis>1525199773129</millis>
+  <sequence>88</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:13</date>
+  <millis>1525199773625</millis>
+  <sequence>89</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:14</date>
+  <millis>1525199774122</millis>
+  <sequence>90</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:14</date>
+  <millis>1525199774634</millis>
+  <sequence>91</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:15</date>
+  <millis>1525199775162</millis>
+  <sequence>92</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:15</date>
+  <millis>1525199775659</millis>
+  <sequence>93</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:16</date>
+  <millis>1525199776138</millis>
+  <sequence>94</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>WARNING</level>
+  <class>com.QADT.readPackets</class>
+  <method>clear</method>
+  <thread>18</thread>
+  <message>Clearing</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:16</date>
+  <millis>1525199776478</millis>
+  <sequence>95</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>INFO</level>
+  <class>com.QADT.readPackets</class>
+  <method>run</method>
+  <thread>18</thread>
+  <message>Thread killed successfully.</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:16</date>
+  <millis>1525199776591</millis>
+  <sequence>96</sequence>
+  <logger>com.QADT.SerialCommunicator</logger>
+  <level>INFO</level>
+  <class>com.QADT.SerialCommunicator</class>
+  <method>closeConnection</method>
+  <thread>13</thread>
+  <message>Connection closed</message>
+</record>
+<record>
+  <date>2018-05-01T14:36:16</date>
+  <millis>1525199776592</millis>
+  <sequence>97</sequence>
+  <logger>com.QADT.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QADT.GUIController</class>
+  <method>close</method>
+  <thread>13</thread>
+  <message>Interface closed.</message>
+</record>
+</log>

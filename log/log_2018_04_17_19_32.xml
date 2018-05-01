@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="windows-1252" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2018-04-17T19:32:56</date>
+  <millis>1524007976377</millis>
+  <sequence>0</sequence>
+  <logger>com.QADT.SerialCommunicator</logger>
+  <level>INFO</level>
+  <class>com.QADT.SerialCommunicator</class>
+  <method>resuscitate</method>
+  <thread>13</thread>
+  <message>Timer was started!</message>
+</record>
+<record>
+  <date>2018-04-17T19:32:56</date>
+  <millis>1524007976477</millis>
+  <sequence>1</sequence>
+  <logger>com.QADT.SerialCommunicator</logger>
+  <level>INFO</level>
+  <class>com.QADT.SerialCommunicator</class>
+  <method>resuscitate</method>
+  <thread>13</thread>
+  <message>Packet reader started!</message>
+</record>
+<record>
+  <date>2018-04-17T19:33:02</date>
+  <millis>1524007982321</millis>
+  <sequence>2</sequence>
+  <logger>com.QADT.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QADT.GUIController</class>
+  <method>initCanvas</method>
+  <thread>13</thread>
+  <message>Canvas initialized.</message>
+</record>
+<record>
+  <date>2018-04-17T19:33:02</date>
+  <millis>1524007982399</millis>
+  <sequence>3</sequence>
+  <logger>com.QADT.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QADT.GUIController</class>
+  <method>drawMap</method>
+  <thread>13</thread>
+  <message>Map drawn</message>
+</record>
+<record>
+  <date>2018-04-17T19:33:05</date>
+  <millis>1524007985738</millis>
+  <sequence>4</sequence>
+  <logger>com.QADT.GUIController</logger>
+  <level>SEVERE</level>
+  <class>com.QADT.GUIController</class>
+  <method>toCanvas</method>
+  <thread>13</thread>
+  <message>Point (-77.495606, 44.227921)outside of map!</message>
+</record>
+<record>
+  <date>2018-04-17T19:33:05</date>
+  <millis>1524007985742</millis>
+  <sequence>5</sequence>
+  <logger>com.QADT.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QADT.GUIController</class>
+  <method>testDraw</method>
+  <thread>13</thread>
+  <message>Test drawn!</message>
+</record>
+<record>
+  <date>2018-04-17T19:33:58</date>
+  <millis>1524008038570</millis>
+  <sequence>6</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>INFO</level>
+  <class>com.QADT.readPackets</class>
+  <method>run</method>
+  <thread>18</thread>
+  <message>Thread killed successfully.</message>
+</record>
+<record>
+  <date>2018-04-17T19:33:58</date>
+  <millis>1524008038577</millis>
+  <sequence>7</sequence>
+  <logger>com.QADT.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QADT.GUIController</class>
+  <method>close</method>
+  <thread>13</thread>
+  <message>Interface closed.</message>
+</record>
+</log>

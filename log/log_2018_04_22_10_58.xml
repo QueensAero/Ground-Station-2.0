@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="windows-1252" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2018-04-22T10:58:11</date>
+  <millis>1524409091282</millis>
+  <sequence>0</sequence>
+  <logger>com.QADT.SerialCommunicator</logger>
+  <level>INFO</level>
+  <class>com.QADT.SerialCommunicator</class>
+  <method>resuscitate</method>
+  <thread>13</thread>
+  <message>Timer was started!</message>
+</record>
+<record>
+  <date>2018-04-22T10:58:11</date>
+  <millis>1524409091295</millis>
+  <sequence>1</sequence>
+  <logger>com.QADT.SerialCommunicator</logger>
+  <level>INFO</level>
+  <class>com.QADT.SerialCommunicator</class>
+  <method>resuscitate</method>
+  <thread>13</thread>
+  <message>Packet reader started!</message>
+</record>
+<record>
+  <date>2018-04-22T10:58:17</date>
+  <millis>1524409097212</millis>
+  <sequence>2</sequence>
+  <logger>com.QADT.SerialCommunicator</logger>
+  <level>INFO</level>
+  <class>com.QADT.SerialCommunicator</class>
+  <method>openConnection</method>
+  <thread>20</thread>
+  <message>Connection established.</message>
+</record>
+<record>
+  <date>2018-04-22T10:58:18</date>
+  <millis>1524409098456</millis>
+  <sequence>3</sequence>
+  <logger>com.QADT.SerialCommunicator</logger>
+  <level>INFO</level>
+  <class>com.QADT.SerialCommunicator</class>
+  <method>initXbee</method>
+  <thread>20</thread>
+  <message>Xbee successfully initialized.</message>
+</record>
+<record>
+  <date>2018-04-22T10:58:18</date>
+  <millis>1524409098747</millis>
+  <sequence>4</sequence>
+  <logger>com.QADT.GUIController</logger>
+  <level>SEVERE</level>
+  <class>com.QADT.GUIController</class>
+  <method>drawMap</method>
+  <thread>22</thread>
+  <message>Map doesn't exist!</message>
+</record>
+<record>
+  <date>2018-04-22T10:58:19</date>
+  <millis>1524409099001</millis>
+  <sequence>5</sequence>
+  <logger>com.QADT.GUIController</logger>
+  <level>SEVERE</level>
+  <class>com.QADT.GUIController</class>
+  <method>drawMap</method>
+  <thread>23</thread>
+  <message>Map doesn't exist!</message>
+</record>
+<record>
+  <date>2018-04-22T10:58:19</date>
+  <millis>1524409099257</millis>
+  <sequence>6</sequence>
+  <logger>com.QADT.GUIController</logger>
+  <level>SEVERE</level>
+  <class>com.QADT.GUIController</class>
+  <method>drawMap</method>
+  <thread>24</thread>
+  <message>Map doesn't exist!</message>
+</record>
+<record>
+  <date>2018-04-22T10:58:19</date>
+  <millis>1524409099498</millis>
+  <sequence>7</sequence>
+  <logger>com.QADT.GUIController</logger>
+  <level>SEVERE</level>
+  <class>com.QADT.GUIController</class>
+  <method>drawMap</method>
+  <thread>25</thread>
+  <message>Map doesn't exist!</message>
+</record>
+<record>
+  <date>2018-04-22T10:58:19</date>
+  <millis>1524409099755</millis>
+  <sequence>8</sequence>
+  <logger>com.QADT.GUIController</logger>
+  <level>SEVERE</level>
+  <class>com.QADT.GUIController</class>
+  <method>drawMap</method>
+  <thread>26</thread>
+  <message>Map doesn't exist!</message>
+</record>
+<record>
+  <date>2018-04-22T10:58:20</date>
+  <millis>1524409100009</millis>
+  <sequence>9</sequence>
+  <logger>com.QADT.GUIController</logger>
+  <level>SEVERE</level>
+  <class>com.QADT.GUIController</class>
+  <method>drawMap</method>
+  <thread>27</thread>
+  <message>Map doesn't exist!</message>
+</record>
+<record>
+  <date>2018-04-22T10:58:20</date>
+  <millis>1524409100251</millis>
+  <sequence>10</sequence>
+  <logger>com.QADT.GUIController</logger>
+  <level>SEVERE</level>
+  <class>com.QADT.GUIController</class>
+  <method>drawMap</method>
+  <thread>28</thread>
+  <message>Map doesn't exist!</message>
+</record>
+<record>
+  <date>2018-04-22T10:58:20</date>
+  <millis>1524409100506</millis>
+  <sequence>11</sequence>
+  <logger>com.QADT.GUIController</logger>
+  <level>SEVERE</level>
+  <class>com.QADT.GUIController</class>
+  <method>drawMap</method>
+  <thread>29</thread>
+  <message>Map doesn't exist!</message>
+</record>
+<record>
+  <date>2018-04-22T10:58:20</date>
+  <millis>1524409100681</millis>
+  <sequence>12</sequence>
+  <logger>com.QADT.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QADT.GUIController</class>
+  <method>initCanvas</method>
+  <thread>13</thread>
+  <message>Canvas initialized.</message>
+</record>
+<record>
+  <date>2018-04-22T10:58:20</date>
+  <millis>1524409100825</millis>
+  <sequence>13</sequence>
+  <logger>com.QADT.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QADT.GUIController</class>
+  <method>drawMap</method>
+  <thread>13</thread>
+  <message>Map drawn</message>
+</record>
+<record>
+  <date>2018-04-22T10:59:17</date>
+  <millis>1524409157553</millis>
+  <sequence>14</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>INFO</level>
+  <class>com.QADT.readPackets</class>
+  <method>run</method>
+  <thread>18</thread>
+  <message>Thread killed successfully.</message>
+</record>
+<record>
+  <date>2018-04-22T10:59:17</date>
+  <millis>1524409157661</millis>
+  <sequence>15</sequence>
+  <logger>com.QADT.SerialCommunicator</logger>
+  <level>INFO</level>
+  <class>com.QADT.SerialCommunicator</class>
+  <method>closeConnection</method>
+  <thread>13</thread>
+  <message>Connection closed</message>
+</record>
+<record>
+  <date>2018-04-22T10:59:17</date>
+  <millis>1524409157729</millis>
+  <sequence>16</sequence>
+  <logger>com.QADT.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QADT.GUIController</class>
+  <method>close</method>
+  <thread>13</thread>
+  <message>Interface closed.</message>
+</record>
+</log>

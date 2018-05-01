@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="windows-1252" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2018-05-01T14:49:36</date>
+  <millis>1525200576863</millis>
+  <sequence>0</sequence>
+  <logger>com.QADT.SerialCommunicator</logger>
+  <level>INFO</level>
+  <class>com.QADT.SerialCommunicator</class>
+  <method>resuscitate</method>
+  <thread>13</thread>
+  <message>Timer was started!</message>
+</record>
+<record>
+  <date>2018-05-01T14:49:36</date>
+  <millis>1525200576880</millis>
+  <sequence>1</sequence>
+  <logger>com.QADT.SerialCommunicator</logger>
+  <level>INFO</level>
+  <class>com.QADT.SerialCommunicator</class>
+  <method>resuscitate</method>
+  <thread>13</thread>
+  <message>Packet reader started!</message>
+</record>
+<record>
+  <date>2018-05-01T14:49:41</date>
+  <millis>1525200581443</millis>
+  <sequence>2</sequence>
+  <logger>com.QADT.SerialCommunicator</logger>
+  <level>INFO</level>
+  <class>com.QADT.SerialCommunicator</class>
+  <method>openConnection</method>
+  <thread>20</thread>
+  <message>Connection established.</message>
+</record>
+<record>
+  <date>2018-05-01T14:49:42</date>
+  <millis>1525200582694</millis>
+  <sequence>3</sequence>
+  <logger>com.QADT.SerialCommunicator</logger>
+  <level>INFO</level>
+  <class>com.QADT.SerialCommunicator</class>
+  <method>initXbee</method>
+  <thread>20</thread>
+  <message>Xbee successfully initialized.</message>
+</record>
+<record>
+  <date>2018-05-01T14:49:45</date>
+  <millis>1525200585223</millis>
+  <sequence>4</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>INFO</level>
+  <class>com.QADT.readPackets$1</class>
+  <method>run</method>
+  <thread>31</thread>
+  <message>Picture packet.</message>
+</record>
+<record>
+  <date>2018-05-01T14:49:46</date>
+  <millis>1525200586568</millis>
+  <sequence>5</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>INFO</level>
+  <class>com.QADT.readPackets$1</class>
+  <method>run</method>
+  <thread>38</thread>
+  <message>Picture packet.</message>
+</record>
+<record>
+  <date>2018-05-01T14:49:47</date>
+  <millis>1525200587945</millis>
+  <sequence>6</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>INFO</level>
+  <class>com.QADT.readPackets$1</class>
+  <method>run</method>
+  <thread>44</thread>
+  <message>Picture packet.</message>
+</record>
+<record>
+  <date>2018-05-01T14:49:49</date>
+  <millis>1525200589451</millis>
+  <sequence>7</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>INFO</level>
+  <class>com.QADT.readPackets$1</class>
+  <method>run</method>
+  <thread>51</thread>
+  <message>Picture packet.</message>
+</record>
+<record>
+  <date>2018-05-01T14:49:50</date>
+  <millis>1525200590923</millis>
+  <sequence>8</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>INFO</level>
+  <class>com.QADT.readPackets$1</class>
+  <method>run</method>
+  <thread>58</thread>
+  <message>Picture packet.</message>
+</record>
+<record>
+  <date>2018-05-01T14:49:52</date>
+  <millis>1525200592547</millis>
+  <sequence>9</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>INFO</level>
+  <class>com.QADT.readPackets$1</class>
+  <method>run</method>
+  <thread>65</thread>
+  <message>Picture packet.</message>
+</record>
+<record>
+  <date>2018-05-01T14:49:52</date>
+  <millis>1525200592547</millis>
+  <sequence>10</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>INFO</level>
+  <class>com.QADT.readPackets$1</class>
+  <method>run</method>
+  <thread>66</thread>
+  <message>Picture packet.</message>
+</record>
+<record>
+  <date>2018-05-01T14:49:54</date>
+  <millis>1525200594303</millis>
+  <sequence>11</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>INFO</level>
+  <class>com.QADT.readPackets$1</class>
+  <method>run</method>
+  <thread>73</thread>
+  <message>Picture packet.</message>
+</record>
+<record>
+  <date>2018-05-01T14:49:54</date>
+  <millis>1525200594304</millis>
+  <sequence>12</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>INFO</level>
+  <class>com.QADT.readPackets$1</class>
+  <method>run</method>
+  <thread>74</thread>
+  <message>Picture packet.</message>
+</record>
+<record>
+  <date>2018-05-01T14:49:56</date>
+  <millis>1525200596571</millis>
+  <sequence>14</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>INFO</level>
+  <class>com.QADT.readPackets$1</class>
+  <method>run</method>
+  <thread>84</thread>
+  <message>Picture packet.</message>
+</record>
+<record>
+  <date>2018-05-01T14:49:56</date>
+  <millis>1525200596571</millis>
+  <sequence>13</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>INFO</level>
+  <class>com.QADT.readPackets$1</class>
+  <method>run</method>
+  <thread>83</thread>
+  <message>Picture packet.</message>
+</record>
+<record>
+  <date>2018-05-01T14:49:58</date>
+  <millis>1525200598876</millis>
+  <sequence>15</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>INFO</level>
+  <class>com.QADT.readPackets$1</class>
+  <method>run</method>
+  <thread>94</thread>
+  <message>Picture packet.</message>
+</record>
+<record>
+  <date>2018-05-01T14:50:00</date>
+  <millis>1525200600700</millis>
+  <sequence>16</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>INFO</level>
+  <class>com.QADT.readPackets$1</class>
+  <method>run</method>
+  <thread>102</thread>
+  <message>Picture packet.</message>
+</record>
+<record>
+  <date>2018-05-01T14:50:01</date>
+  <millis>1525200601917</millis>
+  <sequence>17</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>INFO</level>
+  <class>com.QADT.readPackets$1</class>
+  <method>run</method>
+  <thread>108</thread>
+  <message>Picture packet.</message>
+</record>
+<record>
+  <date>2018-05-01T14:50:04</date>
+  <millis>1525200604366</millis>
+  <sequence>18</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>INFO</level>
+  <class>com.QADT.readPackets$1</class>
+  <method>run</method>
+  <thread>119</thread>
+  <message>Picture packet.</message>
+</record>
+<record>
+  <date>2018-05-01T14:50:05</date>
+  <millis>1525200605887</millis>
+  <sequence>19</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>INFO</level>
+  <class>com.QADT.readPackets$1</class>
+  <method>run</method>
+  <thread>126</thread>
+  <message>Picture packet.</message>
+</record>
+<record>
+  <date>2018-05-01T14:50:06</date>
+  <millis>1525200606976</millis>
+  <sequence>20</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>INFO</level>
+  <class>com.QADT.readPackets$1</class>
+  <method>run</method>
+  <thread>131</thread>
+  <message>Picture packet.</message>
+</record>
+<record>
+  <date>2018-05-01T14:50:08</date>
+  <millis>1525200608662</millis>
+  <sequence>21</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>INFO</level>
+  <class>com.QADT.readPackets$1</class>
+  <method>run</method>
+  <thread>139</thread>
+  <message>Picture packet.</message>
+</record>
+<record>
+  <date>2018-05-01T14:50:09</date>
+  <millis>1525200609985</millis>
+  <sequence>22</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>INFO</level>
+  <class>com.QADT.readPackets$1</class>
+  <method>run</method>
+  <thread>145</thread>
+  <message>Picture packet.</message>
+</record>
+<record>
+  <date>2018-05-01T14:50:11</date>
+  <millis>1525200611153</millis>
+  <sequence>23</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>INFO</level>
+  <class>com.QADT.readPackets$1</class>
+  <method>run</method>
+  <thread>151</thread>
+  <message>Picture packet.</message>
+</record>
+<record>
+  <date>2018-05-01T14:50:12</date>
+  <millis>1525200612835</millis>
+  <sequence>24</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>INFO</level>
+  <class>com.QADT.readPackets$1</class>
+  <method>run</method>
+  <thread>157</thread>
+  <message>Picture packet.</message>
+</record>
+<record>
+  <date>2018-05-01T14:50:15</date>
+  <millis>1525200615233</millis>
+  <sequence>25</sequence>
+  <logger>com.QADT.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QADT.GUIController</class>
+  <method>initCanvas</method>
+  <thread>13</thread>
+  <message>Canvas initialized.</message>
+</record>
+<record>
+  <date>2018-05-01T14:50:15</date>
+  <millis>1525200615240</millis>
+  <sequence>26</sequence>
+  <logger>com.QADT.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QADT.GUIController</class>
+  <method>initVideoCan</method>
+  <thread>13</thread>
+  <message>Canvas initialized.</message>
+</record>
+<record>
+  <date>2018-05-01T14:50:15</date>
+  <millis>1525200615512</millis>
+  <sequence>27</sequence>
+  <logger>com.QADT.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QADT.GUIController</class>
+  <method>runVideo</method>
+  <thread>13</thread>
+  <message>Video stream opened.</message>
+</record>
+<record>
+  <date>2018-05-01T14:50:19</date>
+  <millis>1525200619701</millis>
+  <sequence>28</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>INFO</level>
+  <class>com.QADT.readPackets$1</class>
+  <method>run</method>
+  <thread>188</thread>
+  <message>Picture packet.</message>
+</record>
+<record>
+  <date>2018-05-01T14:50:21</date>
+  <millis>1525200621527</millis>
+  <sequence>29</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>INFO</level>
+  <class>com.QADT.readPackets$1</class>
+  <method>run</method>
+  <thread>196</thread>
+  <message>Picture packet.</message>
+</record>
+<record>
+  <date>2018-05-01T14:50:23</date>
+  <millis>1525200623095</millis>
+  <sequence>30</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>INFO</level>
+  <class>com.QADT.readPackets$1</class>
+  <method>run</method>
+  <thread>203</thread>
+  <message>Picture packet.</message>
+</record>
+<record>
+  <date>2018-05-01T14:50:24</date>
+  <millis>1525200624841</millis>
+  <sequence>31</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>INFO</level>
+  <class>com.QADT.readPackets$1</class>
+  <method>run</method>
+  <thread>211</thread>
+  <message>Picture packet.</message>
+</record>
+<record>
+  <date>2018-05-01T14:50:26</date>
+  <millis>1525200626460</millis>
+  <sequence>32</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>INFO</level>
+  <class>com.QADT.readPackets$1</class>
+  <method>run</method>
+  <thread>219</thread>
+  <message>Picture packet.</message>
+</record>
+<record>
+  <date>2018-05-01T14:50:50</date>
+  <millis>1525200650760</millis>
+  <sequence>33</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>INFO</level>
+  <class>com.QADT.readPackets</class>
+  <method>run</method>
+  <thread>18</thread>
+  <message>Thread killed successfully.</message>
+</record>
+<record>
+  <date>2018-05-01T14:50:50</date>
+  <millis>1525200650761</millis>
+  <sequence>34</sequence>
+  <logger>com.QADT.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QADT.GUIController</class>
+  <method>killTimer</method>
+  <thread>13</thread>
+  <message>Video stream closed.</message>
+</record>
+<record>
+  <date>2018-05-01T14:50:50</date>
+  <millis>1525200650875</millis>
+  <sequence>35</sequence>
+  <logger>com.QADT.SerialCommunicator</logger>
+  <level>INFO</level>
+  <class>com.QADT.SerialCommunicator</class>
+  <method>closeConnection</method>
+  <thread>13</thread>
+  <message>Connection closed</message>
+</record>
+<record>
+  <date>2018-05-01T14:50:50</date>
+  <millis>1525200650898</millis>
+  <sequence>36</sequence>
+  <logger>com.QADT.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QADT.GUIController</class>
+  <method>close</method>
+  <thread>13</thread>
+  <message>Interface closed.</message>
+</record>
+</log>

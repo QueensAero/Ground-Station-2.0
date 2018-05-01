@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="windows-1252" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2018-05-01T14:54:25</date>
+  <millis>1525200865841</millis>
+  <sequence>0</sequence>
+  <logger>com.QADT.SerialCommunicator</logger>
+  <level>INFO</level>
+  <class>com.QADT.SerialCommunicator</class>
+  <method>resuscitate</method>
+  <thread>13</thread>
+  <message>Timer was started!</message>
+</record>
+<record>
+  <date>2018-05-01T14:54:25</date>
+  <millis>1525200865855</millis>
+  <sequence>1</sequence>
+  <logger>com.QADT.SerialCommunicator</logger>
+  <level>INFO</level>
+  <class>com.QADT.SerialCommunicator</class>
+  <method>resuscitate</method>
+  <thread>13</thread>
+  <message>Packet reader started!</message>
+</record>
+<record>
+  <date>2018-05-01T14:54:31</date>
+  <millis>1525200871587</millis>
+  <sequence>2</sequence>
+  <logger>com.QADT.SerialCommunicator</logger>
+  <level>INFO</level>
+  <class>com.QADT.SerialCommunicator</class>
+  <method>openConnection</method>
+  <thread>20</thread>
+  <message>Connection established.</message>
+</record>
+<record>
+  <date>2018-05-01T14:54:32</date>
+  <millis>1525200872833</millis>
+  <sequence>3</sequence>
+  <logger>com.QADT.SerialCommunicator</logger>
+  <level>INFO</level>
+  <class>com.QADT.SerialCommunicator</class>
+  <method>initXbee</method>
+  <thread>20</thread>
+  <message>Xbee successfully initialized.</message>
+</record>
+<record>
+  <date>2018-05-01T14:54:45</date>
+  <millis>1525200885877</millis>
+  <sequence>4</sequence>
+  <logger>com.QADT.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QADT.GUIController</class>
+  <method>initCanvas</method>
+  <thread>13</thread>
+  <message>Canvas initialized.</message>
+</record>
+<record>
+  <date>2018-05-01T14:54:45</date>
+  <millis>1525200885882</millis>
+  <sequence>5</sequence>
+  <logger>com.QADT.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QADT.GUIController</class>
+  <method>initVideoCan</method>
+  <thread>13</thread>
+  <message>Canvas initialized.</message>
+</record>
+<record>
+  <date>2018-05-01T14:54:45</date>
+  <millis>1525200885990</millis>
+  <sequence>6</sequence>
+  <logger>com.QADT.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QADT.GUIController</class>
+  <method>runVideo</method>
+  <thread>13</thread>
+  <message>Video stream opened.</message>
+</record>
+<record>
+  <date>2018-05-01T14:54:48</date>
+  <millis>1525200888702</millis>
+  <sequence>7</sequence>
+  <logger>com.QADT.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QADT.GUIController</class>
+  <method>drawMap</method>
+  <thread>13</thread>
+  <message>Map drawn</message>
+</record>
+<record>
+  <date>2018-05-01T14:55:54</date>
+  <millis>1525200954791</millis>
+  <sequence>8</sequence>
+  <logger>com.QADT.readPackets</logger>
+  <level>INFO</level>
+  <class>com.QADT.readPackets</class>
+  <method>run</method>
+  <thread>18</thread>
+  <message>Thread killed successfully.</message>
+</record>
+<record>
+  <date>2018-05-01T14:55:54</date>
+  <millis>1525200954794</millis>
+  <sequence>9</sequence>
+  <logger>com.QADT.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QADT.GUIController</class>
+  <method>killTimer</method>
+  <thread>13</thread>
+  <message>Video stream closed.</message>
+</record>
+<record>
+  <date>2018-05-01T14:55:54</date>
+  <millis>1525200954911</millis>
+  <sequence>10</sequence>
+  <logger>com.QADT.SerialCommunicator</logger>
+  <level>INFO</level>
+  <class>com.QADT.SerialCommunicator</class>
+  <method>closeConnection</method>
+  <thread>13</thread>
+  <message>Connection closed</message>
+</record>
+<record>
+  <date>2018-05-01T14:55:54</date>
+  <millis>1525200954922</millis>
+  <sequence>11</sequence>
+  <logger>com.QADT.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QADT.GUIController</class>
+  <method>close</method>
+  <thread>13</thread>
+  <message>Interface closed.</message>
+</record>
+</log>

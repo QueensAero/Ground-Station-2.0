@@ -1,8 +1,11 @@
 package com.QADT;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,18 +18,20 @@ import org.json.JSONObject;
 import javafx.application.Platform;
 
 public class dataManager {
-	private float distToOrg, distTrav;
-	private ArrayList<tuple> path;
-	private float altAlt, altGPS, speed, HDOP, sValid, battState, heading;
-	private int satelites, btsAv;
-	private String fixType;
-	private GUIController cont;
-	private SerialCommunicator comm;
-	private static final Logger log = Logger.getLogger(dataManager.class.getName());
-	private static final DecimalFormat df = new DecimalFormat("#.##");
-	private static final DecimalFormat df4 = new DecimalFormat("#.####");
+	//Tracking/data attributes for plane
+	ArrayList<tuple> path, picPoints;
+	float distToOrg, distTrav, altAlt, altGPS, speed, HDOP, sValid, battState, heading;
+	int satelites, btsAv;
+	String fixType;
+	
+	//Utility objects
+	GUIController cont;
+	SerialCommunicator comm;
+	static final Logger log = Logger.getLogger(dataManager.class.getName());
+	protected static final DecimalFormat df = new DecimalFormat("#.##");
+	protected static final DecimalFormat df4 = new DecimalFormat("#.####");
 
-	//Transmission constants (all private by default, not written for clarity)
+	//Transmission constants (all private by default)
 	static final char DROP_OPEN = 'o', DROP_CLOSE = 'c', BATT_V = 'b';
 	static final char AUTO_ON = 'a', AUTO_OFF = 'n';
 	static final char AUTO_ON_CONF = 'b', AUTO_OFF_CONF = 'd';
@@ -37,12 +42,12 @@ public class dataManager {
 	//Class Constructor
 	public dataManager(GUIController _cont) {
 		cont = _cont;
-		log.addHandler(GUIController.taHandle);
-		log.addHandler(GUIController.filehandle);
+		GUIController.addLogHandler(log); 
 		distToOrg = distTrav = battState = HDOP = altAlt = altGPS = speed = sValid = satelites = btsAv = 0;
-		fixType = FIX_TYPE[0];
+		fixType = FIX_TYPE[0]; // Initializes fix type to be disconnected
 		path = new ArrayList<tuple>();
-		update();
+		picPoints = new ArrayList<tuple>();
+		update(); //Initial printing of data to the GUI
 	}
 	//Returns list of GPS coordinates
 	public ArrayList<tuple> getPath() {return path; }
@@ -66,21 +71,27 @@ public class dataManager {
 		}
 		else if(cont.getXW())
 			cont.setXW(false);
+		
 		//Serial Connection
 		else if(cont.getSW())
 			cont.setSW(false);
 		if(badConn && !comm.getPortStatus())
 			cont.setSW(true);
+		
 		//Battery Level
 		if(battState < 9.5 && !cont.getBW())
 			cont.setBW(true);
 		else if(battState >= 9.5 && cont.getBW())
 			cont.setBW(false);
+		
+		//Fix condition
 		if(fixType == FIX_TYPE[0] && !cont.getGW())
 			cont.setGW(true);
 		else if(fixType != FIX_TYPE[0] && cont.getGW())
 			cont.setGW(false);
 	}
+	
+	//Updates the time since the last data packet was received
 	public void printPackTime() {
 		double packDelta = (double)comm.getPackTime() / 1000;
 		Platform.runLater(new Runnable() {
@@ -89,26 +100,35 @@ public class dataManager {
 		});
 		statusChecks(packDelta);
 	}
+	
+	//Prints new data to the GUI
 	private void update() {
 		cont.updateWarnText();
 		Platform.runLater(new Runnable()  {
 			@Override
 			public void run() {
+				//Physical status data
 				cont.orginDist.setText("Distance from origin: " + Float.toString(distToOrg) + "m");
 				cont.travDist.setText("Distance travelled: " + Float.toString(distTrav) + "m");
-				cont.batLevel.setText("Battery state: " + df.format(battState) + " V");
-				cont.hdop.setText("HDOP: " + Float.toString(HDOP));
 				cont.heightL.setText("Height: " + getHeight());
-				cont.satNum.setText("Satellites: " + satelites);
-				cont.bytesAvail.setText("Bytes availible: " + btsAv);
-				cont.packetsR.setText("Packets received: " + comm.packsIn);
-				cont.packRateLabel.setText("Pack rate: " + df.format(comm.packRate) + " packs/s");
+				cont.onMapStatus.setText("Currently: " + ON_MAP[cont.mapRel]);
 				cont.speed.setText("Speed: " + speed);
+				cont.headingLabel.setText("Heading: " + heading);
+				
+				//GPS data
+				cont.hdop.setText("HDOP: " + Float.toString(HDOP));
+				cont.satNum.setText("Satellites: " + satelites);
 				cont.vHDOP.setText("Time since valid HDOP: " + sValid + "s");
 				cont.fixTp.setText("Fix Type: " + fixType);
 				cont.pointsTaken.setText("Points taken: " + path.size());
-				cont.headingLabel.setText("Heading: " + heading);
-				cont.onMapStatus.setText("Currently: " + ON_MAP[cont.mapRel]);
+				
+				//Connection data
+				cont.batLevel.setText("Battery state: " + df.format(battState) + " V");
+				cont.bytesAvail.setText("Bytes availible: " + btsAv);
+				cont.packetsR.setText("Packets received: " + comm.packsIn);
+				cont.picPLabel.setText("Picture Packets: " + picPoints.size());
+				cont.dataPLabel.setText("Data Packets: " + path.size());
+				cont.packRateLabel.setText("Pack rate: " + df.format(comm.packRate) + " packs/s");
 				if(comm != null && comm.getState())
 					cont.connState.setText("Connection state: Connected to " + comm.portName);
 				else
@@ -116,23 +136,25 @@ public class dataManager {
 			}
 		});
 	}
-	public void openBay() {comm.sendByte((byte)DROP_OPEN); }
-	public void closeBay() {comm.sendByte((byte)DROP_CLOSE); }
+	
+	//Adds a new point to the path (list of GPS coordinates with height and heading
 	public void newPoint(float latt, float lon, float h1, float h2, float heading){
 		tuple newLoc = new tuple(latt,lon, h1, h2, heading);
 		if(path.size() < 1) {
 			path.add(newLoc);
 			return;
 		}
+		//Check if new location more than 200m away from last point, if so don't add point
 		float distFromLast = getDistance(path.get(path.size()-1),newLoc);
-		//check if new location more than 200m away from last point, if so don't add point
-		if(distFromLast<=200 || true) { //Get ride of || true after more testing...
+		if(distFromLast <= 200 || true) { //Get ride of || true after more testing...
 			distTrav += distFromLast;
 			distToOrg = getDistance(path.get(0),newLoc);
 			path.add(newLoc);
 		}
 		cont.drawPath();
 	}
+	
+	//Returns the distance between two points (in meters)
 	private float getDistance(tuple loc1, tuple loc2){
 		double dlatt = Math.toRadians(loc2.x)-Math.toRadians(loc1.x);
 		double dlong = Math.toRadians(loc2.y)-Math.toRadians(loc1.y);
@@ -141,9 +163,10 @@ public class dataManager {
 		float dist = 6371 * c;
 		return dist*1000; 	//dist in meters
 	}
+	//Returns distance 
 	public float getDistanceTraveled(){return distTrav; }
 	public float distanceFromStart(){return distToOrg; }
-	public void newPacket(byte[] pack) {newPacket(pack, -1); }
+	
 	//Reorders incoming bytes from the Xbee (i.e. 4321 -> 1234)
 	private byte[] flipBytes(byte[] set) {
 		int len = set.length;
@@ -152,6 +175,31 @@ public class dataManager {
 			out[i] = set[len-i-1];
 		return out;
 	}
+	
+	//Adds a point to list of points/locations where a picture was taken
+	public void newPicturePacket(byte[] pack) {
+		float lat = 0, lng = 0;
+		for(int i=2;i<pack.length-3;i+=4) {
+			byte[] tmp = new byte[4];
+			System.arraycopy(pack, i, tmp, 0, 4);
+			tmp = flipBytes(tmp);
+			if(i == 2)
+				altAlt = ByteBuffer.wrap(tmp).getFloat();
+			else if(i == 6)
+				lng = ByteBuffer.wrap(tmp).getFloat();
+			else if(i == 10)
+				lat = ByteBuffer.wrap(tmp).getFloat();
+			else if(i == 14)
+				altGPS = ByteBuffer.wrap(tmp).getFloat();
+			else if(i == 18)
+				heading = ByteBuffer.wrap(tmp).getFloat();
+		}
+		picPoints.add(new tuple(lng, lat, altAlt, altGPS, heading));
+	}
+	
+	//Method overload to make testing easiers
+	public void newPacket(byte[] pack) {newPacket(pack, -1); }
+	
 	//Parses new incoming data packet
 	public void newPacket(byte[] pack, int _btsAv) {
 		float lat = 0, lng = 0;
@@ -188,14 +236,27 @@ public class dataManager {
 		} catch(ArrayIndexOutOfBoundsException e) {log.severe("You fucked up... fix type doesn't exist"); }
 		update();
 	}
-	public float getHeight() {return (altAlt + altGPS) / 2; }
+	
+	//Returns the average height reported between altimeter and GPS
+	public float getHeight() {return (float)getAvg(altAlt, altGPS); }
 	public double getAvg(double a, double b) {return (a + b) / 2; }
+	
+	//Method overload to easily export both fligh path and picture points
 	public void exportData() {
-		if(path.isEmpty()) return;
+		exportData(path, "flight");
+		exportData(picPoints, "pics");
+	}
+	//Exports path data to a JSON object for use later
+	/* JSON form:
+	 * out { data [ point, point, point, ... ] }
+	 *  |-> point: {long, lat, height, bearing}
+	 */
+	public void exportData(ArrayList<tuple> dataSet, String setName) {
+		if(dataSet.isEmpty()) return; //No reason to export an empty file
 		
-		JSONObject out = new JSONObject();
+		JSONObject out = new JSONObject(); //Base of JSON Object
 		JSONArray data = new JSONArray();
-		for(tuple pt : path) {
+		for(tuple pt : dataSet) {	//Adds each point from the given data set
 			JSONObject tmp = new JSONObject();
 			tmp.put("long", pt.x);
 			tmp.put("lat", pt.y);
@@ -203,8 +264,16 @@ public class dataManager {
 			tmp.put("bearing", pt.head);
 			data.put(tmp);
 		}
-		out.put("data", data);
-		String fileName = new SimpleDateFormat("'data_'yyyy'_'MM'_'dd'_'HH'_'mm'.json'").format(new Date());
+		
+		out.put("data", data); //Adds data array to base
+		
+		//Export to file
+		String folderName = "data/";
+		String fileName = folderName + setName + new SimpleDateFormat("'_'yyyy'_'MM'_'dd'_'HH'_'mm'.json'").format(new Date());
+		if(!Files.exists(Paths.get(folderName))) {	//Makes a new folder if one is not already initialized
+			new File(folderName).mkdir();
+			log.info("Made a new folder for logged files");
+		}
 		try(FileWriter file = new FileWriter(fileName)) {
 			file.write(out.toString());
 			file.flush();
