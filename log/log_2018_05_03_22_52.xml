@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="windows-1252" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2018-05-03T22:52:30</date>
+  <millis>1525402350102</millis>
+  <sequence>0</sequence>
+  <logger>com.QADT.SerialCommunicator</logger>
+  <level>INFO</level>
+  <class>com.QADT.SerialCommunicator</class>
+  <method>resuscitate</method>
+  <thread>13</thread>
+  <message>Timer was started!</message>
+</record>
+<record>
+  <date>2018-05-03T22:52:30</date>
+  <millis>1525402350125</millis>
+  <sequence>1</sequence>
+  <logger>com.QADT.SerialCommunicator</logger>
+  <level>INFO</level>
+  <class>com.QADT.SerialCommunicator</class>
+  <method>resuscitate</method>
+  <thread>13</thread>
+  <message>Packet reader started!</message>
+</record>
+<record>
+  <date>2018-05-03T22:52:35</date>
+  <millis>1525402355719</millis>
+  <sequence>2</sequence>
+  <logger>com.QADT.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QADT.GUIController</class>
+  <method>initCanvas</method>
+  <thread>13</thread>
+  <message>Canvas initialized.</message>
+</record>
+<record>
+  <date>2018-05-03T22:52:35</date>
+  <millis>1525402355804</millis>
+  <sequence>3</sequence>
+  <logger>com.QADT.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QADT.GUIController</class>
+  <method>drawMap</method>
+  <thread>13</thread>
+  <message>Map drawn</message>
+</record>
+<record>
+  <date>2018-05-03T22:52:44</date>
+  <millis>1525402364345</millis>
+  <sequence>4</sequence>
+  <logger>com.QADT.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QADT.GUIController</class>
+  <method>initVideoCan</method>
+  <thread>13</thread>
+  <message>Canvas initialized.</message>
+</record>
+<record>
+  <date>2018-05-03T22:52:44</date>
+  <millis>1525402364592</millis>
+  <sequence>5</sequence>
+  <logger>com.QADT.GUIController</logger>
+  <level>INFO</level>
+  <class>com.QADT.GUIController</class>
+  <method>runVideo</method>
+  <thread>13</thread>
+  <message>Video stream opened.</message>
+</record>

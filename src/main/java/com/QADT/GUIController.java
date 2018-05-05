@@ -175,6 +175,10 @@ public class GUIController {
 						camRight();
 						log.fine("Camera going right\n");
 						break;
+					case "R":
+						camReset();
+						log.fine("Camera reset");
+						break; 
 				}
 			}
 		});
@@ -531,5 +535,6 @@ public class GUIController {
 	public void camUp(){comm.sendByte((byte)'u'); }
 	public void camRight(){comm.sendByte((byte)'e'); }
 	public void camDown(){comm.sendByte((byte)'d'); }
+	public void camReset() {comm.sendByte((byte)'x'); }
 	public void clearTextArea(){infoPane.clear();}
 }
